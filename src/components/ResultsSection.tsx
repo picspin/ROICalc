@@ -126,20 +126,34 @@ const ResultsSection: React.FC = () => {
               <li>
                 <span className="font-medium">时间效益 (∆P):</span> {formatCurrency(deltaP)}/月
                 <p className="text-sm text-neutral-600 mt-1">
-                  根据<a href="https://doi.org/10.2147/mder.s353221" className="text-primary-600 hover:underline" target="_blank" rel="noopener noreferrer">PerCenT研究</a><sup>7</sup>，通过优化工作流程和自动化操作，患者检查时间节省40-63%
+                  根据<a href="https://doi.org/10.2147/mder.s353221" className="text-primary-600 hover:underline" target="_blank" rel="noopener noreferrer">PerCenT研究</a><sup>7</sup>，通过优化工作流程和自动化操作，患者检查时间节省40-63%。计算方法：
                 </p>
+                <ul className="list-decimal pl-5 text-sm text-neutral-600 mt-1 space-y-1">
+                  <li>每患者时间节省 = 基准设备检查时间 ({baseDevice.specs["单次检查总耗时_分钟"]}分钟) - 目标设备检查时间 ({targetDevice.specs["单次检查总耗时_分钟"]}分钟)</li>
+                  <li>总时间节省 = 每患者时间节省 × 月患者量 × 时间成本</li>
+                </ul>
               </li>
               <li>
                 <span className="font-medium">成本效益 (∆V):</span> {formatCurrency(deltaV)}/月
                 <p className="text-sm text-neutral-600 mt-1">
-                  通过智能协议和高效耗材管理实现成本优化，参考<a href="https://doi.org/10.1109/tbme.2020.3003131" className="text-primary-600 hover:underline" target="_blank" rel="noopener noreferrer">CARE研究</a><sup>8</sup>
+                  通过智能协议和高效耗材管理实现成本优化，参考<a href="https://doi.org/10.1109/tbme.2020.3003131" className="text-primary-600 hover:underline" target="_blank" rel="noopener noreferrer">CARE研究</a><sup>8</sup>。计算方法：
                 </p>
+                <ul className="list-decimal pl-5 text-sm text-neutral-600 mt-1 space-y-1">
+                  <li>每患者成本节省 = 基准设备耗材成本 ({formatCurrency(baseDevice.specs["单次检查耗材成本_元"])}) - 目标设备耗材成本 ({formatCurrency(targetDevice.specs["单次检查耗材成本_元"])})</li>
+                  <li>智能化系数 = 目标设备支持智能协议 ? 1.2 : 1.0（智能协议可额外节省20%）</li>
+                  <li>月度成本节省 = 每患者成本节省 × 月患者量 × 智能化系数</li>
+                </ul>
               </li>
               <li>
                 <span className="font-medium">造影剂节省:</span> {formatVolume(contrastSavings)}/月
                 <p className="text-sm text-neutral-600 mt-1">
-                  DRG/DIP政策支付模式下，Centargo采用多通道管路系统、智能个性化注射方案，实现造影剂用量的精准控制，减少不必要的浪费<sup>1,2,3,4</sup>
+                  DRG/DIP政策支付模式下，Centargo采用多通道管路系统、智能个性化注射方案，实现造影剂用量的精准控制，减少不必要的浪费<sup>1,2,3,4</sup>。计算方法：
                 </p>
+                <ul className="list-decimal pl-5 text-sm text-neutral-600 mt-1 space-y-1">
+                  <li>基础用量：每位患者平均使用62ml造影剂</li>
+                  <li>智能协议支持时可节省20%用量</li>
+                  <li>月度节省量 = 月患者量 × 基础用量 × 节省比例</li>
+                </ul>
               </li>
             </ul>
           </div>

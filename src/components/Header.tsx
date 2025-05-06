@@ -1,7 +1,10 @@
 import React from 'react';
 import { Stethoscope } from 'lucide-react';
+import useAppStore from '../store/useAppStore';
 
 const Header: React.FC = () => {
+  const { setActiveTab } = useAppStore();
+
   return (
     <header className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-4">
@@ -10,7 +13,12 @@ const Header: React.FC = () => {
             <Stethoscope 
               className="h-8 w-8 text-primary-500" 
             />
-            <h1 className="text-xl font-semibold text-neutral-800">放射科高注 ROI 对比</h1>
+            <button 
+              onClick={() => setActiveTab('input')}
+              className="text-xl font-semibold text-neutral-800 hover:text-primary-600 transition-colors"
+            >
+              放射科高注 ROI 对比
+            </button>
           </div>
           <div className="flex items-center space-x-2">
             <span className="text-sm font-medium text-neutral-600">数据可视化分析工具</span>

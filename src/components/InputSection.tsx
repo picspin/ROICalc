@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calculator, ChevronDown } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import { getDeviceOptions, getDeviceById } from '../data/devices';
@@ -32,10 +32,15 @@ const InputSection: React.FC = () => {
           {targetDevice && (
             <div className="p-4 bg-white rounded-lg shadow-sm transition-all hover:shadow-md">
               <div className="aspect-square flex items-center justify-center overflow-hidden bg-neutral-50 rounded-md p-4">
-                <Image 
+                <img 
                   src={targetDevice.imageUrl} 
                   alt={`${targetDevice.brand} ${targetDevice.model}`}
                   className="max-h-40 object-contain mix-blend-multiply"
+                  onError={(e) => {
+                    // Fallback if image fails to load
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = "https://cdn-icons-png.flaticon.com/512/5769/5769530.png";
+                  }}
                 />
               </div>
               <p className="text-sm text-center mt-3 text-neutral-600 font-medium">
@@ -176,10 +181,15 @@ const InputSection: React.FC = () => {
           {baseDevice && (
             <div className="p-4 bg-white rounded-lg shadow-sm transition-all hover:shadow-md">
               <div className="aspect-square flex items-center justify-center overflow-hidden bg-neutral-50 rounded-md p-4">
-                <Image 
+                <img 
                   src={baseDevice.imageUrl} 
                   alt={`${baseDevice.brand} ${baseDevice.model}`}
                   className="max-h-40 object-contain mix-blend-multiply"
+                  onError={(e) => {
+                    // Fallback if image fails to load
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = "https://cdn-icons-png.flaticon.com/512/5769/5769530.png";
+                  }}
                 />
               </div>
               <p className="text-sm text-center mt-3 text-neutral-600 font-medium">

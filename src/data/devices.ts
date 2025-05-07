@@ -2,8 +2,8 @@ import { DevicesData } from '../types';
 
 // 在Vite中，/public目录下的资源可以直接通过根路径访问
 export const devicesData: DevicesData = {
-  "version": "1.0.0",
-  "lastUpdated": "2025-04-19T22:00:00Z",
+  "version": "1.0.1",
+  "lastUpdated": "2025-05-07T22:00:00Z",
   "devices": {
     "Bayer-Centargo": {
       "brand": "Bayer",
@@ -25,6 +25,9 @@ export const devicesData: DevicesData = {
         "易用性": 8,
         "维护便捷性": 8.5,
         "造影剂节省量": 9,
+        "注射技术类型": "活塞式",
+        "管路类型": "三筒",
+        "NMPA等级": "NMPA ClassIII"
       }
     },
     "Ulrich-CTMotion": {
@@ -47,6 +50,9 @@ export const devicesData: DevicesData = {
         "易用性": 7.5,
         "维护便捷性": 7,
         "造影剂节省量": 7.5,
+        "注射技术类型": "蠕吸式",
+        "管路类型": "三筒",
+        "NMPA等级": "NMPA ClassII"
       }
     },
     "Guerbet-OptiVantage": {
@@ -69,6 +75,9 @@ export const devicesData: DevicesData = {
         "易用性": 7,
         "维护便捷性": 7.5,
         "造影剂节省量": 8,
+        "注射技术类型": "蠕吸式",
+        "管路类型": "双筒",
+        "NMPA等级": "NMPA ClassII"
       }
     },
     "Bayer-Stellant": {
@@ -91,6 +100,9 @@ export const devicesData: DevicesData = {
         "易用性": 7.5,
         "维护便捷性": 7,
         "造影剂节省量": 7,
+        "注射技术类型": "活塞式",
+        "管路类型": "双筒",
+        "NMPA等级": "NMPA ClassII"
       }
     },
     "CLear-Edot": {
@@ -113,6 +125,9 @@ export const devicesData: DevicesData = {
         "易用性": 7,
         "维护便捷性": 6,
         "造影剂节省量": 7,
+        "注射技术类型": "蠕吸式",
+        "管路类型": "三筒",
+        "NMPA等级": "NMPA ClassII"
       }
     },
     "Medtron-Accutron": {
@@ -135,6 +150,9 @@ export const devicesData: DevicesData = {
         "易用性": 7,
         "维护便捷性": 6,
         "造影剂节省量": 6,
+        "注射技术类型": "蠕吸式",
+        "管路类型": "双筒",
+        "NMPA等级": "NMPA ClassII"
       }
     }
   }

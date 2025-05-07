@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowDown, ArrowUp, Clock, DollarSign, PercentSquare, Droplets } from 'lucide-react';
+import { ArrowDown, ArrowUp, Clock, DollarSign, PercentSquare, Droplets, BookOpen } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import { getDeviceById } from '../data/devices';
 import { formatCurrency, formatPercent, formatVolume } from '../utils/calculations';
@@ -29,6 +29,41 @@ const ResultsSection: React.FC = () => {
 
   // Calculate contrast agent savings cost
   const contrastSavingsCost = contrastSavings * 2; // 2 Yuan/ml
+
+  // 确定科研应用价值评级
+  const determineResearchValue = () => {
+    // 检查条件：科研附加值>7，是否活塞式，是否三筒，是否NMPA ClassIII，智能协议支持，信息化支持
+    const conditions = [
+      targetDevice.specs["科研附加值"] > 7,
+      targetDevice.specs["注射技术类型"] === "活塞式",
+      targetDevice.specs["管路类型"] === "三筒",
+      targetDevice.specs["NMPA等级"] === "NMPA ClassIII",
+      targetDevice.specs["智能协议支持"],
+      targetDevice.specs["信息化支持"]
+    ];
+    
+    // 计算满足的条件数量
+    const satisfiedCount = conditions.filter(Boolean).length;
+    
+    if (satisfiedCount === 6) {
+      return {
+        rating: "显著",
+        explanation: "1.Centargo作为多通道活塞式高压注射器具备首个医疗器械临床三类证，提供精准稳定和个性化的增强注射方案 2.智能化协议及P3T双流提供更多个性化注射扫描方案，进一步优化图像质量；3. 结合最新的光子计数CT应用，提供更多科研价值。\n\n想要了解更多Centargo临床科研特点，请联系👉Bayer AS Group (xiaolei.zhu@bayer.com），并加以参考文献4,5,6,9,10"
+      };
+    } else if (satisfiedCount >= 3) {
+      return {
+        rating: "较高",
+        explanation: "该设备具备信息化支持，活塞式和多通道管路特色，可以为精准的临床科研应用提供有力支撑"
+      };
+    } else {
+      return {
+        rating: "不明显",
+        explanation: "该设备可用于临床，如果开展相关科研需要更多证据以及额外选配一些功能"
+      };
+    }
+  };
+
+  const researchValue = determineResearchValue();
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -120,7 +155,7 @@ const ResultsSection: React.FC = () => {
         <div className="space-y-4 text-neutral-700">
           <p>
             对比分析显示，使用 <a href="https://www.radiologysolutions.bayer.com/medrad-centargo-ct" className="text-primary-600 hover:underline" target="_blank" rel="noopener noreferrer">{targetDevice.brand} {targetDevice.model}</a><sup>6</sup> 相比 {baseDevice.brand} {baseDevice.model}，
-            医院每月可提升工作效率 {efficiencyImprovement.toFixed(1)}%，相当于节省 {monthlyTimeSaved.toFixed(1)} 个工作小时。
+            <span className="font-bold text-primary-700 bg-primary-50 px-2 py-1 rounded">医院每月可提升工作效率 {efficiencyImprovement.toFixed(1)}%，相当于节省 {monthlyTimeSaved.toFixed(1)} 个工作小时。</span>
           </p>
           
           <div className="space-y-2">
@@ -153,11 +188,20 @@ const ResultsSection: React.FC = () => {
                   在DRG/DIP政策支付模式下，<strong>不应只考虑耗材，而也要考虑对比剂的节省</strong>。{targetDevice.brand} {targetDevice.model}采用多通道管路系统、智能个性化注射方案，实现造影剂用量的精准控制<sup>1,2,3,4</sup>。计算方法：
                 </p>
                 <ul className="list-decimal pl-5 text-sm text-neutral-600 mt-1 space-y-1">
-                  <li>基础用量：每位患者平均使用62ml造影剂</li>
+                  <li>基础用量：每位患者平均使用约为60ml造影剂</li>
                   <li>智能协议支持时可节省20%用量</li>
                   <li>设备效率差异带来额外15%的节省潜力</li>
-                  <li>对比剂节省经济价值 = 月度节省量 × 对比剂单价 (2元/ml)</li>
+                  <li>对比剂节省经济价值 = 月度节省量 × 对比剂单价 (约2元/ml)</li>
                 </ul>
+              </li>
+              <li>
+                <span className="font-medium">科研应用价值:</span> <span className={`font-medium ${
+                  researchValue.rating === "显著" ? "text-green-600" : 
+                  researchValue.rating === "较高" ? "text-blue-600" : "text-amber-600"
+                }`}>{researchValue.rating}</span>
+                <p className="text-sm text-neutral-600 mt-1">
+                  {researchValue.explanation}
+                </p>
               </li>
             </ul>
           </div>
@@ -185,6 +229,8 @@ const ResultsSection: React.FC = () => {
               <li><a href="https://www.bayer.com.cn/zh-hans/baieryingxiangzhenduanxiecentargoliangxiangdiqijiejinbohui" target="_blank" rel="noopener noreferrer">国内首个三类证CT高压注射系统Centargo</a></li>
               <li>Kemper, C.A. et.al. (2022). Performance of Centargo: A novel Piston based injection System for High Throughput in CE CT. Medical Devices(Auckland, NZ)15, 79. doi: <a href="https://doi.org/10.2147/mder.s353221" target="_blank" rel="noopener noreferrer">10.2147/mder.s353221</a></li>
               <li>Mcdemott MC .et.al. IEEE Trans Biomed Eng. 2021. doi: <a href="https://doi.org/10.1109/tbme.2020.3003131" target="_blank" rel="noopener noreferrer">10.1109/tbme.2020.3003131</a></li>
+              <li>McDermott MC, Sartoretti T, Stammen L, Martens B, Jost G, Pietsch H, Gutjahr R, Schmidt B, Flohr TG, Alkadhi H, Wildberger JE. Countering Calcium Blooming With Personalized Contrast Media Injection Protocols: The 1-2-3 Rule for Photon-Counting Detector CCTA. Invest Radiol. 2024 Oct 1;59(10):684-690. doi: <a href="https://doi.org/10.1097/RLI.0000000000001078" target="_blank" rel="noopener noreferrer">10.1097/RLI.0000000000001078</a></li>
+              <li>Caruso D, De Santis D, Tremamunno G, Santangeli C, Polidori T, Bona GG, Zerunian M, Del Gaudio A, Pugliese L, Laghi A. Deep learning reconstruction algorithm and high-concentration contrast medium: feasibility of a double-low protocol in coronary computed tomography angiography. Eur Radiol. 2025 Apr;35(4):2213-2221. doi: <a href="https://doi.org/10.1007/s00330-024-11059-x" target="_blank" rel="noopener noreferrer">10.1007/s00330-024-11059-x</a></li>
             </ol>
           </div>
         </div>

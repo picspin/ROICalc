@@ -12,6 +12,9 @@ export interface DeviceSpecs {
   "易用性": number;
   "维护便捷性": number;
   "造影剂节省量": number;
+  "注射技术类型": "活塞式" | "蠕吸式";
+  "管路类型": "双筒" | "三筒";
+  "NMPA等级": "NMPA ClassIII" | "NMPA ClassII";
 }
 
 export interface Device {

@@ -1,0 +1,14 @@
+{
+  "icons": {
+    "ctScan": "/images/Icon/ct-scan.svg"
+  },
+  "devices": {
+    "bayerCentargo": "/images/devices/bayer-centargo.png",
+    "ulrichCtmotion": "/images/devices/ulrich-ctmotion.png",
+    "guerbetOptivantage": "/images/devices/guerbet-optivantage.png",
+    "bayerStellant": "/images/devices/bayer-stellant.png",
+    "clearEdot": "/images/devices/clear-edot.png",
+    "medtronAccutron": "/images/devices/medtron-accutron.png",
+    "bayerSalient": "/images/devices/bayer-salient.png"
+  }
+} 

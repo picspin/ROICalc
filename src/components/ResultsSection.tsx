@@ -142,8 +142,8 @@ const ResultsSection: React.FC = () => {
                   通过智能协议和高效耗材管理实现成本优化，包括耗材成本和对比剂节省，参考<a href="https://doi.org/10.1109/tbme.2020.3003131" className="text-primary-600 hover:underline" target="_blank" rel="noopener noreferrer">CARE研究</a><sup>8</sup>。计算方法：
                 </p>
                 <ul className="list-decimal pl-5 text-sm text-neutral-600 mt-1 space-y-1">
-                  <li>耗材成本节省 = (基准耗材成本 ({formatCurrency(baseDevice.specs["单次检查耗材成本_元"])}) - 目标设备耗材成本 ({formatCurrency(targetDevice.specs["单次检查耗材成本_元"])})) × 月患者量</li>
-                  <li>对比剂节省费用 = 对比剂节省量 ({formatVolume(contrastSavings)}) × 对比剂单价 (2元/ml)</li>
+                  <li>耗材成本节省 = (基准耗材成本 - 目标设备耗材成本 ) × 月患者量</li>
+                  <li>对比剂节省费用 = 对比剂节省量 ({formatVolume(contrastSavings)}) × 对比剂单价</li>
                   <li>月度成本总节省 = 耗材成本节省 + 对比剂节省费用</li>
                 </ul>
               </li>

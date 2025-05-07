@@ -10,7 +10,7 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <Image 
+            <img 
               src="/images/Icon/ct-scan.svg" 
               alt="CT Scan Icon"
               className="h-8 w-8" 

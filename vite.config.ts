@@ -13,7 +13,10 @@ export default defineConfig({
       '@': resolve(__dirname, './src'),
     },
   },
+  publicDir: 'public',
   build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
     rollupOptions: {
       output: {
         manualChunks: {
@@ -24,5 +27,6 @@ export default defineConfig({
   },
   server: {
     host: true,
+    hmr: true,
   },
 });

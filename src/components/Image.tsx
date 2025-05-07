@@ -2,22 +2,16 @@ import React from 'react';
 
 // 图片导入处理助手
 const getImageUrl = (src: string): string => {
-  // 处理不同环境下的图片路径
   // 如果图片已经是完整URL或者以http开头，直接返回
   if (src.startsWith('http') || src.startsWith('data:')) {
     return src;
   }
   
-  // 确保以/开头的路径
+  // 确保首个字符是/
   const path = src.startsWith('/') ? src : `/${src}`;
   
-  try {
-    // 尝试使用Vite的import.meta.url处理(生产环境)
-    return new URL(path, import.meta.url).href;
-  } catch (error) {
-    // 降级方案：直接返回路径
-    return path;
-  }
+  // 在Vite中，/public目录下的资源可直接通过根路径访问
+  return path;
 };
 
 interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {

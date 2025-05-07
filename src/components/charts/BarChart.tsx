@@ -98,7 +98,7 @@ const BarChartComponent: React.FC = () => {
         </ResponsiveContainer>
       </div>
       <div className="mt-4 text-sm text-neutral-600">
-        <p className="text-center mb-2">对比显示 {targetDevice.brand} {targetDevice.model} 与 {baseDevice.brand} {baseDevice.model} 的经济效益差异</p>
+        <p className="text-center mb-2">对比显示 {targetDevice.brand} {targetDevice.model} 与 {baseDevice.brand} {baseDevice.model} 的增强月经济效益差异（包含造影剂+耗材的消耗）</p>
         <p className="text-xs italic">
           ¹PerCenT研究证实患者时间将节省40-63%（Kemper, C.A. et.al. (2022). Performance of Centargo: A novel Piston based injection System for High Throughput in CE CT. Medical Devices(Auckland, NZ)15, 79.），经测算，同等时间下增加每日增强量所带来的收益计算
         </p>

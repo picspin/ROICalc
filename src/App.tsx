@@ -13,7 +13,7 @@ function App() {
     <div className="flex flex-col min-h-screen bg-neutral-50 relative">
       {/* Background Pattern */}
       <div 
-        className="fixed inset-0 -z-10 pointer-events-none bg-blend-soft-light opacity-10"
+        className="fixed inset-0 -z-10 pointer-events-none bg-blend-soft-light opacity-5"
         style={{
           backgroundImage: `url(${
             activeTab === 'input' 
@@ -72,9 +72,9 @@ function App() {
         )}
         
         {/* Content */}
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           {activeTab === 'input' ? (
-            <div className="md:w-2/3 lg:w-1/2 mx-auto">
+            <div className="w-full mx-auto">
               <InputSection />
             </div>
           ) : (

@@ -9,7 +9,7 @@ export const devicesData: DevicesData = {
       "model": "Centargo",
       "category": "高压注射器",
       "isBase": false,
-      "imageUrl": "/public/images/devices/bayer-centargo.png",
+      "imageUrl": "/images/devices/bayer-centargo.png",
       "specs": {
         "耗材更换时间_分钟": 0.33,
         "单次检查总耗时_分钟": 5,
@@ -31,7 +31,7 @@ export const devicesData: DevicesData = {
       "model": "CTMotion",
       "category": "高压注射器",
       "isBase": true,
-      "imageUrl": "/public/images/devices/ulrich-ctmotion.png",
+      "imageUrl": "/images/devices/ulrich-ctmotion.png",
       "specs": {
         "耗材更换时间_分钟": 2,
         "单次检查总耗时_分钟": 7,
@@ -53,7 +53,7 @@ export const devicesData: DevicesData = {
       "model": "OptiVantage",
       "category": "高压注射器",
       "isBase": false,
-      "imageUrl": "/public/images/devices/guerbet-optivantage.png",
+      "imageUrl": "/images/devices/guerbet-optivantage.png",
       "specs": {
         "耗材更换时间_分钟": 3,
         "单次检查总耗时_分钟": 8,
@@ -75,7 +75,7 @@ export const devicesData: DevicesData = {
       "model": "Stellant DCE",
       "category": "高压注射器",
       "isBase": true,
-      "imageUrl": "/public/images/devices/bayer-stellant.png",
+      "imageUrl": "/images/devices/bayer-stellant.png",
       "specs": {
         "耗材更换时间_分钟": 3,
         "单次检查总耗时_分钟": 10,
@@ -89,7 +89,7 @@ export const devicesData: DevicesData = {
         "工作效率": 7,
         "易用性": 7.5,
         "维护便捷性": 7,
-        "造影剂节省量": 7.5,
+        "造影剂节省量": 7,
       }
     },
     "CLear-Edot": {
@@ -97,7 +97,7 @@ export const devicesData: DevicesData = {
       "model": "Edot",
       "category": "高压注射器",
       "isBase": true,
-      "imageUrl": "/public/images/devices/clear-edot.png",
+      "imageUrl": "/images/devices/clear-edot.png",
       "specs": {
         "耗材更换时间_分钟": 2,
         "单次检查总耗时_分钟": 8,
@@ -119,7 +119,7 @@ export const devicesData: DevicesData = {
       "model": "Accutron",
       "category": "高压注射器",
       "isBase": false,
-      "imageUrl": "/public/images/devices/medtron-accutron.png",
+      "imageUrl": "/images/devices/medtron-accutron.png",
       "specs": {
         "耗材更换时间_分钟": 3,
         "单次检查总耗时_分钟": 10,
@@ -133,7 +133,7 @@ export const devicesData: DevicesData = {
         "工作效率": 6,
         "易用性": 7,
         "维护便捷性": 6,
-        "造影剂节省量": 7,
+        "造影剂节省量": 6,
       }
     }
   }

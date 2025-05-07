@@ -48,7 +48,7 @@ const ResultsSection: React.FC = () => {
     if (satisfiedCount === 6) {
       return {
         rating: "显著",
-        explanation: "1.Centargo作为多通道活塞式高压注射器具备首个医疗器械临床三类证，提供精准稳定和个性化的增强注射方案 2.智能化协议及P3T双流提供更多个性化注射扫描方案，进一步优化图像质量；3. 结合最新的光子计数CT应用，提供更多科研价值。\n\n想要了解更多Centargo临床科研特点，请联系👉Bayer AS Group (xiaolei.zhu@bayer.com），并加以参考文献4,5,6,9,10"
+        explanation: "1.Centargo作为多通道活塞式高压注射器具备首个医疗器械临床三类证，提供精准稳定和个性化的增强注射方案 2.智能化协议及P3T双流提供更多个性化注射扫描方案，进一步优化图像质量；3. 结合最新的光子计数CT应用，提供更多科研价值。\n\n想要了解更多Centargo临床科研特点，请联系👉<a href=\"mailto:xiaolei.zhu@bayer.com\">Bayer AS Group</a><sup>4,5,6,9,10</sup>"
       };
     } else if (satisfiedCount >= 3) {
       return {

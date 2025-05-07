@@ -1,6 +1,6 @@
 import React from 'react';
-import { Stethoscope } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
+import Image from './Image';
 
 const Header: React.FC = () => {
   const { setActiveTab } = useAppStore();
@@ -10,8 +10,10 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <Stethoscope 
-              className="h-8 w-8 text-primary-500" 
+            <Image 
+              src="/images/Icon/ct-scan.svg" 
+              alt="CT Scan Icon"
+              className="h-8 w-8" 
             />
             <button 
               onClick={() => setActiveTab('input')}

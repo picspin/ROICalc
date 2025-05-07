@@ -1,5 +1,13 @@
 import { DevicesData } from '../types';
 
+// 导入图片资源以确保在构建时正确处理
+import bayerCentargo from '/images/devices/bayer-centargo.png';
+import ulrichCtmotion from '/images/devices/ulrich-ctmotion.png';
+import guerbetOptivantage from '/images/devices/guerbet-optivantage.png';
+import bayerStellant from '/images/devices/bayer-stellant.png';
+import clearEdot from '/images/devices/clear-edot.png';
+import medtronAccutron from '/images/devices/medtron-accutron.png';
+
 export const devicesData: DevicesData = {
   "version": "1.0.0",
   "lastUpdated": "2025-04-19T22:00:00Z",
@@ -9,7 +17,7 @@ export const devicesData: DevicesData = {
       "model": "Centargo",
       "category": "高压注射器",
       "isBase": false,
-      "imageUrl": "/images/devices/bayer-centargo.png",
+      "imageUrl": bayerCentargo,
       "specs": {
         "耗材更换时间_分钟": 0.33,
         "单次检查总耗时_分钟": 5,
@@ -31,7 +39,7 @@ export const devicesData: DevicesData = {
       "model": "CTMotion",
       "category": "高压注射器",
       "isBase": true,
-      "imageUrl": "/images/devices/ulrich-ctmotion.png",
+      "imageUrl": ulrichCtmotion,
       "specs": {
         "耗材更换时间_分钟": 2,
         "单次检查总耗时_分钟": 7,
@@ -53,7 +61,7 @@ export const devicesData: DevicesData = {
       "model": "OptiVantage",
       "category": "高压注射器",
       "isBase": false,
-      "imageUrl": "/images/devices/guerbet-optivantage.png",
+      "imageUrl": guerbetOptivantage,
       "specs": {
         "耗材更换时间_分钟": 3,
         "单次检查总耗时_分钟": 8,
@@ -75,7 +83,7 @@ export const devicesData: DevicesData = {
       "model": "Stellant DCE",
       "category": "高压注射器",
       "isBase": true,
-      "imageUrl": "/images/devices/bayer-stellant.png",
+      "imageUrl": bayerStellant,
       "specs": {
         "耗材更换时间_分钟": 3,
         "单次检查总耗时_分钟": 10,
@@ -97,7 +105,7 @@ export const devicesData: DevicesData = {
       "model": "Edot",
       "category": "高压注射器",
       "isBase": true,
-      "imageUrl": "/images/devices/clear-edot.png",
+      "imageUrl": clearEdot,
       "specs": {
         "耗材更换时间_分钟": 2,
         "单次检查总耗时_分钟": 8,
@@ -119,7 +127,7 @@ export const devicesData: DevicesData = {
       "model": "Accutron",
       "category": "高压注射器",
       "isBase": false,
-      "imageUrl": "/images/devices/medtron-accutron.png",
+      "imageUrl": medtronAccutron,
       "specs": {
         "耗材更换时间_分钟": 3,
         "单次检查总耗时_分钟": 10,

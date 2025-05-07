@@ -27,6 +27,9 @@ const ResultsSection: React.FC = () => {
   const monthlyWorkingHours = 26 * 10; // 26 days * 10 hours
   const efficiencyImprovement = ((monthlyWorkingHours / (monthlyWorkingHours - monthlyTimeSaved)) - 1) * 100;
 
+  // Calculate contrast agent savings cost
+  const contrastSavingsCost = contrastSavings * 2; // 2 Yuan/ml
+
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Key Metrics Cards */}
@@ -57,7 +60,7 @@ const ResultsSection: React.FC = () => {
             {formatVolume(contrastSavings)}
           </p>
           <p className="text-sm text-neutral-500 mt-1">
-            智能协议优化<sup>5</sup>
+            价值约 {formatCurrency(contrastSavingsCost)}
           </p>
         </div>
 
@@ -136,23 +139,24 @@ const ResultsSection: React.FC = () => {
               <li>
                 <span className="font-medium">成本效益 (∆V):</span> {formatCurrency(deltaV)}/月
                 <p className="text-sm text-neutral-600 mt-1">
-                  通过智能协议和高效耗材管理实现成本优化，参考<a href="https://doi.org/10.1109/tbme.2020.3003131" className="text-primary-600 hover:underline" target="_blank" rel="noopener noreferrer">CARE研究</a><sup>8</sup>。计算方法：
+                  通过智能协议和高效耗材管理实现成本优化，包括耗材成本和对比剂节省，参考<a href="https://doi.org/10.1109/tbme.2020.3003131" className="text-primary-600 hover:underline" target="_blank" rel="noopener noreferrer">CARE研究</a><sup>8</sup>。计算方法：
                 </p>
                 <ul className="list-decimal pl-5 text-sm text-neutral-600 mt-1 space-y-1">
-                  <li>每患者成本节省 = 基准设备耗材成本 ({formatCurrency(baseDevice.specs["单次检查耗材成本_元"])}) - 目标设备耗材成本 ({formatCurrency(targetDevice.specs["单次检查耗材成本_元"])})</li>
-                  <li>智能化系数 = 目标设备支持智能协议 ? 1.2 : 1.0（智能协议可额外节省20%）</li>
-                  <li>月度成本节省 = 每患者成本节省 × 月患者量 × 智能化系数</li>
+                  <li>耗材成本节省 = (基准耗材成本 ({formatCurrency(baseDevice.specs["单次检查耗材成本_元"])}) - 目标设备耗材成本 ({formatCurrency(targetDevice.specs["单次检查耗材成本_元"])})) × 月患者量</li>
+                  <li>对比剂节省费用 = 对比剂节省量 ({formatVolume(contrastSavings)}) × 对比剂单价 (2元/ml)</li>
+                  <li>月度成本总节省 = 耗材成本节省 + 对比剂节省费用</li>
                 </ul>
               </li>
               <li>
                 <span className="font-medium">造影剂节省:</span> {formatVolume(contrastSavings)}/月
                 <p className="text-sm text-neutral-600 mt-1">
-                  DRG/DIP政策支付模式下，Centargo采用多通道管路系统、智能个性化注射方案，实现造影剂用量的精准控制，减少不必要的浪费<sup>1,2,3,4</sup>。计算方法：
+                  在DRG/DIP政策支付模式下，<strong>不应只考虑耗材，而也要考虑对比剂的节省</strong>。{targetDevice.brand} {targetDevice.model}采用多通道管路系统、智能个性化注射方案，实现造影剂用量的精准控制<sup>1,2,3,4</sup>。计算方法：
                 </p>
                 <ul className="list-decimal pl-5 text-sm text-neutral-600 mt-1 space-y-1">
                   <li>基础用量：每位患者平均使用62ml造影剂</li>
                   <li>智能协议支持时可节省20%用量</li>
-                  <li>月度节省量 = 月患者量 × 基础用量 × 节省比例</li>
+                  <li>设备效率差异带来额外15%的节省潜力</li>
+                  <li>对比剂节省经济价值 = 月度节省量 × 对比剂单价 (2元/ml)</li>
                 </ul>
               </li>
             </ul>
@@ -165,6 +169,9 @@ const ResultsSection: React.FC = () => {
               : <span className="text-amber-600 font-medium"> 需要谨慎评估其投资价值</span>
             }，
             投资回报率为 <span className="font-semibold">{formatPercent(roi)}</span>。
+            {targetDevice.specs["智能协议支持"] && 
+              <span className="text-primary-600"> 特别是其智能协议可带来高价值的对比剂节省，直接转化为经济效益和患者安全性提升。</span>
+            }
           </p>
 
           <div className="mt-8 text-sm text-neutral-600 space-y-2">

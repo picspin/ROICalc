@@ -2,6 +2,7 @@ import React from 'react';
 import { Calculator, ChevronDown } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import { getDeviceOptions, getDeviceById } from '../data/devices';
+import Image from './Image';
 
 const InputSection: React.FC = () => {
   const {
@@ -31,7 +32,7 @@ const InputSection: React.FC = () => {
           {targetDevice && (
             <div className="p-4 bg-white rounded-lg shadow-sm transition-all hover:shadow-md">
               <div className="aspect-square flex items-center justify-center overflow-hidden bg-neutral-50 rounded-md p-4">
-                <img 
+                <Image 
                   src={targetDevice.imageUrl} 
                   alt={`${targetDevice.brand} ${targetDevice.model}`}
                   className="max-h-40 object-contain mix-blend-multiply"
@@ -175,7 +176,7 @@ const InputSection: React.FC = () => {
           {baseDevice && (
             <div className="p-4 bg-white rounded-lg shadow-sm transition-all hover:shadow-md">
               <div className="aspect-square flex items-center justify-center overflow-hidden bg-neutral-50 rounded-md p-4">
-                <img 
+                <Image 
                   src={baseDevice.imageUrl} 
                   alt={`${baseDevice.brand} ${baseDevice.model}`}
                   className="max-h-40 object-contain mix-blend-multiply"

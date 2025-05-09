@@ -19,7 +19,7 @@ const Header: React.FC = () => {
               onClick={() => setActiveTab('input')}
               className="text-xl font-semibold text-neutral-800 hover:text-primary-600 transition-colors"
             >
-              放射科高注 ROI 对比
+              CT高注增强效益工具表
             </button>
           </div>
           <div className="flex items-center space-x-2">

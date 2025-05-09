@@ -65,7 +65,7 @@ const InputSection: React.FC = () => {
               {/* Patient Volume Input */}
               <div className="space-y-2">
                 <label htmlFor="patientVolume" className="block text-sm font-medium text-neutral-700">
-                  患者增强量
+                  单台CT对应患者增强量
                 </label>
                 <div className="flex items-center space-x-3">
                   <input

@@ -74,7 +74,7 @@ const ResultsSection: React.FC = () => {
             <div className="bg-primary-100 p-2 rounded-full">
               <Clock className="h-5 w-5 text-primary-600" />
             </div>
-            <h3 className="text-sm font-medium text-neutral-600">工作效率提升</h3>
+            <h3 className="text-sm font-medium text-neutral-600">每台CT每月工作效率提升</h3>
           </div>
           <p className="text-2xl font-bold text-neutral-800">
             {efficiencyImprovement.toFixed(1)}%

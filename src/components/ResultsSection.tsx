@@ -1,8 +1,8 @@
 import React from 'react';
-import { ArrowDown, ArrowUp, Clock, DollarSign, PercentSquare, Droplets, BookOpen } from 'lucide-react';
+import { ArrowDown, ArrowUp, Clock, DollarSign, PercentSquare, Droplets, BookOpen, PlusCircle } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import { getDeviceById } from '../data/devices';
-import { formatCurrency, formatPercent, formatVolume } from '../utils/calculations';
+import { formatCurrency, formatPercent, formatVolume, calculateExtraCTExams } from '../utils/calculations';
 import BarChartComponent from './charts/BarChart';
 import RadarChartComponent from './charts/RadarChart';
 import ParameterComparison from './ParameterComparison';
@@ -27,6 +27,13 @@ const ResultsSection: React.FC = () => {
   const monthlyWorkingHours = 26 * 10; // 26 days * 10 hours
   const efficiencyImprovement = ((monthlyWorkingHours / (monthlyWorkingHours - monthlyTimeSaved)) - 1) * 100;
 
+  // Calculate extra CT examinations that can be performed with saved time
+  const monthlyExtraCT = calculateExtraCTExams(monthlyTimeSaved, targetDevice.specs["单次检查总耗时_分钟"]);
+  
+  // Calculate potential extra revenue (assuming 250 Yuan per CT exam)
+  const ctExamRevenue = 250; // Yuan per exam
+  const potentialExtraRevenue = monthlyExtraCT * ctExamRevenue;
+
   // Calculate contrast agent savings cost
   const contrastSavingsCost = contrastSavings * 2; // 2 Yuan/ml
 
@@ -48,7 +55,12 @@ const ResultsSection: React.FC = () => {
     if (satisfiedCount === 6) {
       return {
         rating: "显著",
-        explanation: "1.Centargo作为多通道活塞式高压注射器具备首个医疗器械临床三类证，提供精准稳定和个性化的增强注射方案<sup>4,6</sup>\n\n2.智能化协议及P3T双流提供更多个性化注射扫描方案，进一步优化图像质量<sup>5</sup>\n\n3. 结合最新的光子计数CT应用，提供更多科研价值<sup>9,10</sup>\n\n想要了解更多Centargo临床科研特点，请联系👉<a href=\"mailto:xiaolei.zhu@bayer.com\">Bayer AS Group</a>"
+        explanation: <>
+          <p>1.Centargo作为多通道活塞式高压注射器具备首个医疗器械临床三类证，提供精准稳定和个性化的增强注射方案<sup>4,6</sup></p>
+          <p className="mt-2">2.智能化协议及P3T双流提供更多个性化注射扫描方案，进一步优化图像质量<sup>5</sup></p>
+          <p className="mt-2">3. 结合最新的光子计数CT应用，提供更多科研价值<sup>9,10</sup></p>
+          <p className="mt-4">想要了解更多Centargo临床科研特点，请联系👉<a href="mailto:xiaolei.zhu@bayer.com" className="text-primary-600 hover:underline">Bayer AS Group</a></p>
+        </>
       };
     } else if (satisfiedCount >= 3) {
       return {
@@ -68,75 +80,37 @@ const ResultsSection: React.FC = () => {
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Key Metrics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow-card p-4 hover:shadow-card-hover transition-shadow">
-          <div className="flex items-center space-x-3 mb-2">
-            <div className="bg-primary-100 p-2 rounded-full">
-              <Clock className="h-5 w-5 text-primary-600" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* 工作效率提升 - 放大突出 */}
+        <div className="bg-white rounded-lg shadow-card p-6 hover:shadow-card-hover transition-shadow border-2 border-primary-300">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="bg-primary-100 p-3 rounded-full">
+              <Clock className="h-6 w-6 text-primary-600" />
             </div>
-            <h3 className="text-sm font-medium text-neutral-600">每台CT每月工作效率提升</h3>
+            <h3 className="text-base font-medium text-neutral-700">每台CT每月工作效率提升</h3>
           </div>
-          <p className="text-2xl font-bold text-neutral-800">
+          <p className="text-3xl font-bold text-primary-700">
             {efficiencyImprovement.toFixed(1)}%
           </p>
-          <p className="text-sm text-neutral-500 mt-1">
-            每月节省 {monthlyTimeSaved.toFixed(1)} 工作小时
+          <p className="text-sm text-neutral-600 mt-2">
+            每月节省 <span className="font-semibold">{monthlyTimeSaved.toFixed(1)}</span> 工作小时，相当于节省 <span className="font-semibold">{(monthlyTimeSaved * 60).toFixed(0)}</span> 分钟
           </p>
         </div>
 
-        <div className="bg-white rounded-lg shadow-card p-4 hover:shadow-card-hover transition-shadow">
-          <div className="flex items-center space-x-3 mb-2">
-            <div className="bg-[#FFF4ED] p-2 rounded-full">
-              <Droplets className="h-5 w-5 text-[#E46C0A]" />
+        {/* 月检查增加量 - 放大突出 */}
+        <div className="bg-white rounded-lg shadow-card p-6 hover:shadow-card-hover transition-shadow border-2 border-secondary-300">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="bg-secondary-100 p-3 rounded-full">
+              <PlusCircle className="h-6 w-6 text-secondary-600" />
             </div>
-            <h3 className="text-sm font-medium text-neutral-600">月造影剂节省<sup>1,2,3,4</sup></h3>
+            <h3 className="text-base font-medium text-neutral-700">每月每台CT检查增加量</h3>
           </div>
-          <p className="text-2xl font-bold text-neutral-800">
-            {formatVolume(contrastSavings)}
+          <p className="text-3xl font-bold text-secondary-700">
+            {Math.round(monthlyExtraCT)} 例
           </p>
-          <p className="text-sm text-neutral-500 mt-1">
-            价值约 {formatCurrency(contrastSavingsCost)}
+          <p className="text-sm text-neutral-600 mt-2">
+            节省的时间可用于增加检查，每月潜在增加收入 <span className="font-semibold">{formatCurrency(potentialExtraRevenue)}</span>
           </p>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-card p-4 hover:shadow-card-hover transition-shadow">
-          <div className="flex items-center space-x-3 mb-2">
-            <div className="bg-primary-100 p-2 rounded-full">
-              <DollarSign className="h-5 w-5 text-primary-600" />
-            </div>
-            <h3 className="text-sm font-medium text-neutral-600">年度节省</h3>
-          </div>
-          <p className="text-2xl font-bold text-neutral-800">
-            {formatCurrency(annualSavings)}
-          </p>
-          <p className="text-sm text-neutral-500 mt-1">
-            相比 {baseDevice.brand} {baseDevice.model}
-          </p>
-        </div>
-        
-        <div className="bg-white rounded-lg shadow-card p-4 hover:shadow-card-hover transition-shadow">
-          <div className="flex items-center space-x-3 mb-2">
-            <div className="bg-secondary-100 p-2 rounded-full">
-              <PercentSquare className="h-5 w-5 text-secondary-600" />
-            </div>
-            <h3 className="text-sm font-medium text-neutral-600">投资回报率</h3>
-          </div>
-          <p className="text-2xl font-bold text-neutral-800">
-            {formatPercent(roi)}
-          </p>
-          <div className="flex items-center mt-1 text-sm">
-            {isWorthyInvestment ? (
-              <>
-                <ArrowUp className="h-4 w-4 text-green-500 mr-1" />
-                <span className="text-green-600">高投资价值</span>
-              </>
-            ) : (
-              <>
-                <ArrowDown className="h-4 w-4 text-amber-500 mr-1" />
-                <span className="text-amber-600">投资谨慎</span>
-              </>
-            )}
-          </div>
         </div>
       </div>
       
@@ -172,36 +146,37 @@ const ResultsSection: React.FC = () => {
                 </ul>
               </li>
               <li>
-                <span className="font-medium">成本效益 (∆V):</span> {formatCurrency(deltaV)}/月
+                <span className="font-medium">增加检查量:</span> {Math.round(monthlyExtraCT)} 例/月
                 <p className="text-sm text-neutral-600 mt-1">
-                  通过智能协议和高效耗材管理实现成本优化，包括耗材成本和对比剂节省，参考<a href="https://doi.org/10.1109/tbme.2020.3003131" className="text-primary-600 hover:underline" target="_blank" rel="noopener noreferrer">CARE研究</a><sup>8</sup>。计算方法：
+                  该设备通过节省时间可以增加检查量，提高CT设备利用率，计算方法：
                 </p>
                 <ul className="list-decimal pl-5 text-sm text-neutral-600 mt-1 space-y-1">
-                  <li>耗材成本节省 = (基准耗材成本 - 目标设备耗材成本 ) × 月患者量</li>
-                  <li>对比剂节省费用 = 对比剂节省量 ({formatVolume(contrastSavings)}) × 对比剂单价</li>
-                  <li>月度成本总节省 = 耗材成本节省 + 对比剂节省费用</li>
+                  <li>每月节省工作时间 = {monthlyTimeSaved.toFixed(1)} 小时 = {(monthlyTimeSaved * 60).toFixed(0)} 分钟</li>
+                  <li>每次检查耗时 = {targetDevice.specs["单次检查总耗时_分钟"]} 分钟</li>
+                  <li>可增加检查数量 = 节省时间 / 每次检查耗时 = {Math.round(monthlyExtraCT)} 例</li>
+                  <li>潜在收入增加 = 增加检查数 × 单次检查收费 = {formatCurrency(potentialExtraRevenue)}</li>
                 </ul>
               </li>
               <li>
-                <span className="font-medium">造影剂节省:</span> {formatVolume(contrastSavings)}/月
+                <span className="font-medium">成本效益 (∆V):</span> {formatCurrency(deltaV)}/月，投资回报率为 {formatPercent(roi)}
                 <p className="text-sm text-neutral-600 mt-1">
-                  在DRG/DIP政策支付模式下，<strong>不应只考虑耗材，而也要考虑对比剂的节省</strong>。{targetDevice.brand} {targetDevice.model}采用多通道管路系统、智能个性化注射方案，实现造影剂用量的精准控制<sup>1,2,3,4</sup>。计算方法：
+                  通过智能协议和高效耗材管理实现成本优化，包括耗材成本和对比剂节省，参考<a href="https://doi.org/10.1109/tbme.2020.3003131" className="text-primary-600 hover:underline" target="_blank" rel="noopener noreferrer">CARE研究</a><sup>8</sup>。
                 </p>
-                <ul className="list-decimal pl-5 text-sm text-neutral-600 mt-1 space-y-1">
-                  <li>基础用量：每位患者平均使用约为60ml造影剂</li>
-                  <li>智能协议支持时可节省20%用量</li>
-                  <li>设备效率差异带来额外15%的节省潜力</li>
-                  <li>对比剂节省经济价值 = 月度节省量 × 对比剂单价 (约2元/ml)</li>
-                </ul>
+              </li>
+              <li>
+                <span className="font-medium">造影剂节省:</span> {formatVolume(contrastSavings)}/月，价值约 {formatCurrency(contrastSavingsCost)}
+                <p className="text-sm text-neutral-600 mt-1">
+                  在DRG/DIP政策支付模式下，<strong>不应只考虑耗材，而也要考虑对比剂的节省</strong>。{targetDevice.brand} {targetDevice.model}采用多通道管路系统、智能个性化注射方案，实现造影剂用量的精准控制<sup>1,2,3,4</sup>。
+                </p>
               </li>
               <li>
                 <span className="font-medium">科研应用价值:</span> <span className={`font-medium ${
                   researchValue.rating === "显著" ? "text-green-600" : 
                   researchValue.rating === "较高" ? "text-blue-600" : "text-amber-600"
                 }`}>{researchValue.rating}</span>
-                <p className="text-sm text-neutral-600 mt-1">
+                <div className="text-sm text-neutral-600 mt-1">
                   {researchValue.explanation}
-                </p>
+                </div>
               </li>
             </ul>
           </div>
@@ -212,7 +187,7 @@ const ResultsSection: React.FC = () => {
               ? <span className="text-green-600 font-medium"> 是一项值得的投资</span>
               : <span className="text-amber-600 font-medium"> 需要谨慎评估其投资价值</span>
             }，
-            投资回报率为 <span className="font-semibold">{formatPercent(roi)}</span>。
+            年度总节省 <span className="font-semibold">{formatCurrency(annualSavings)}</span>。
             {targetDevice.specs["智能协议支持"] && 
               <span className="text-primary-600"> 特别是其智能协议可带来高价值的对比剂节省，直接转化为经济效益和患者安全性提升。</span>
             }

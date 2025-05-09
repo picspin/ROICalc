@@ -199,3 +199,17 @@ export const formatNumber = (value: number, decimals = 1): string => {
 export const formatVolume = (value: number): string => {
   return `${formatNumber(value)} ml`;
 };
+
+/**
+ * 计算节省时间可增加的CT检查数量
+ * 
+ * 计算方法：
+ * 节省的工作小时 * 60分钟 / 目标设备单次检查总耗时
+ */
+export const calculateExtraCTExams = (
+  savedHours: number,
+  targetDeviceExamTime: number
+): number => {
+  const savedMinutes = savedHours * 60;
+  return savedMinutes / targetDeviceExamTime;
+};

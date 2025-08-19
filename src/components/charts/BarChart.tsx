@@ -1,6 +1,7 @@
 import React from 'react';
 import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import useAppStore from '../../store/useAppStore';
+import { useI18n } from '../../contexts/I18nContext';
 import { getDeviceById } from '../../data/devices';
 import { formatCurrency, formatPercent, formatVolume } from '../../utils/calculations';
 
@@ -22,6 +23,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 const BarChartComponent: React.FC = () => {
   const { calculationResult, targetDeviceId, baseDeviceId } = useAppStore();
+  const { t } = useI18n();
   
   if (!calculationResult) return null;
   
@@ -35,25 +37,25 @@ const BarChartComponent: React.FC = () => {
   // Prepare data for the bar chart
   const data = [
     {
-      name: '月节省',
+      name: t.results.charts.monthlySavings,
       value: monthlySavings,
       formattedValue: formatCurrency(monthlySavings),
       fill: '#0077c8'
     },
     {
-      name: '年节省',
+      name: t.results.charts.annualSavings,
       value: annualSavings,
       formattedValue: formatCurrency(annualSavings),
       fill: '#34a87c'
     },
     {
-      name: 'ROI',
+      name: t.results.charts.roi,
       value: roi,
       formattedValue: formatPercent(roi),
       fill: '#ef4444'
     },
     {
-      name: '月造影剂节省',
+      name: t.results.charts.monthlyContrastSavings,
       value: contrastSavings,
       formattedValue: formatVolume(contrastSavings),
       fill: '#E46C0A'
@@ -62,7 +64,7 @@ const BarChartComponent: React.FC = () => {
 
   return (
     <div className="bg-white rounded-lg shadow-card p-4 h-full">
-      <h3 className="text-lg font-semibold mb-4 text-neutral-800">经济效益对比</h3>
+      <h3 className="text-lg font-semibold mb-4 text-neutral-800">{t.results.charts.barTitle}</h3>
       <div className="h-72">
         <ResponsiveContainer width="100%" height="100%">
           <RechartsBarChart
@@ -98,9 +100,9 @@ const BarChartComponent: React.FC = () => {
         </ResponsiveContainer>
       </div>
       <div className="mt-4 text-sm text-neutral-600">
-        <p className="text-center mb-2">对比显示 {targetDevice.brand} {targetDevice.model} 与 {baseDevice.brand} {baseDevice.model} 的增强月经济效益差异（包含造影剂+耗材的消耗）</p>
+        <p className="text-center mb-2">{t.results.charts.comparisonNote} {targetDevice.brand} {targetDevice.model} 与 {baseDevice.brand} {baseDevice.model} {t.results.charts.economicBenefitDifference}</p>
         <p className="text-xs italic">
-          ¹PerCenT研究证实患者时间将节省40-63%（Kemper, C.A. et.al. (2022). Performance of Centargo: A novel Piston based injection System for High Throughput in CE CT. Medical Devices(Auckland, NZ)15, 79.），经测算，同等时间下增加每日增强量所带来的收益计算
+          ¹{t.results.charts.percentStudyNote}（Kemper, C.A. et.al. (2022). Performance of Centargo: A novel Piston based injection System for High Throughput in CE CT. Medical Devices(Auckland, NZ)15, 79.）
         </p>
       </div>
     </div>

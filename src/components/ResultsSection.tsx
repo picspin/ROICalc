@@ -1,6 +1,7 @@
 import React from 'react';
-import { ArrowDown, ArrowUp, Clock, DollarSign, PercentSquare, Droplets, BookOpen, PlusCircle } from 'lucide-react';
+import { Clock, PlusCircle } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
+import { useI18n } from '../contexts/I18nContext';
 import { getDeviceById } from '../data/devices';
 import { formatCurrency, formatPercent, formatVolume, calculateExtraCTExams } from '../utils/calculations';
 import BarChartComponent from './charts/BarChart';
@@ -9,6 +10,7 @@ import ParameterComparison from './ParameterComparison';
 
 const ResultsSection: React.FC = () => {
   const { calculationResult, targetDeviceId, baseDeviceId } = useAppStore();
+  const { t } = useI18n();
   
   const targetDevice = getDeviceById(targetDeviceId);
   const baseDevice = getDeviceById(baseDeviceId);
@@ -87,13 +89,13 @@ const ResultsSection: React.FC = () => {
             <div className="bg-primary-100 p-3 rounded-full">
               <Clock className="h-6 w-6 text-primary-600" />
             </div>
-            <h3 className="text-base font-medium text-neutral-700">每台CT每月工作效率提升</h3>
+            <h3 className="text-base font-medium text-neutral-700">{t.results.workEfficiencyImprovement}</h3>
           </div>
           <p className="text-3xl font-bold text-primary-700">
             {efficiencyImprovement.toFixed(1)}%
           </p>
           <p className="text-sm text-neutral-600 mt-2">
-            每月节省 <span className="font-semibold">{monthlyTimeSaved.toFixed(1)}</span> 工作小时，相当于节省 <span className="font-semibold">{(monthlyTimeSaved * 60).toFixed(0)}</span> 分钟
+            {t.results.monthlySavingsHours} <span className="font-semibold">{monthlyTimeSaved.toFixed(1)}</span> {t.results.workHours}，相当于节省 <span className="font-semibold">{(monthlyTimeSaved * 60).toFixed(0)}</span> {t.results.minutes}
           </p>
         </div>
 
@@ -103,13 +105,13 @@ const ResultsSection: React.FC = () => {
             <div className="bg-secondary-100 p-3 rounded-full">
               <PlusCircle className="h-6 w-6 text-secondary-600" />
             </div>
-            <h3 className="text-base font-medium text-neutral-700">每月每台CT检查增加量</h3>
+            <h3 className="text-base font-medium text-neutral-700">{t.results.monthlyExamIncrease}</h3>
           </div>
           <p className="text-3xl font-bold text-secondary-700">
-            {Math.round(monthlyExtraCT)} 例
+            {Math.round(monthlyExtraCT)} {t.results.cases}
           </p>
           <p className="text-sm text-neutral-600 mt-2">
-            节省的时间可用于增加检查，每月潜在增加收入 <span className="font-semibold">{formatCurrency(potentialExtraRevenue)}</span>
+            {t.results.potentialRevenue} <span className="font-semibold">{formatCurrency(potentialExtraRevenue)}</span>
           </p>
         </div>
       </div>
@@ -125,7 +127,7 @@ const ResultsSection: React.FC = () => {
       
       {/* Summary and Recommendation */}
       <div className="bg-white rounded-lg shadow-card p-6">
-        <h2 className="text-lg font-semibold mb-4 text-neutral-800">分析结论</h2>
+        <h2 className="text-lg font-semibold mb-4 text-neutral-800">{t.results.analysisConclusion}</h2>
         <div className="space-y-4 text-neutral-700">
           <p>
             对比分析显示，使用 <a href="https://www.radiologysolutions.bayer.com/medrad-centargo-ct" className="text-primary-600 hover:underline" target="_blank" rel="noopener noreferrer">{targetDevice.brand} {targetDevice.model}</a><sup>6</sup> 相比 {baseDevice.brand} {baseDevice.model}，

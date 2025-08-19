@@ -43,8 +43,100 @@ export interface Translations {
     roi: string;
     contrastSavings: string;
     performanceComparison: string;
-    parameterComparison: string;
+    parameterComparisonTitle: string;
     additionalExams: string;
+    workEfficiencyImprovement: string;
+    monthlyExamIncrease: string;
+    analysisConclusion: string;
+    monthlySavingsHours: string;
+    workHours: string;
+    minutes: string;
+    cases: string;
+    potentialRevenue: string;
+    benefitsFrom: string;
+    timeEfficiencyDetail: string;
+    additionalExamsDetail: string;
+    costEfficiencyDetail: string;
+    contrastSavingsDetail: string;
+    researchValue: string;
+    worthyInvestment: string;
+    cautiousEvaluation: string;
+    annualSavings: string;
+    smartProtocolBenefit: string;
+    references: string;
+    contactForMoreInfo: string;
+    highResearchValueExplanation: string;
+    unclearResearchValueExplanation: string;
+    equivalentToSaving: string;
+    researchRatings: {
+      significant: string;
+      high: string;
+      unclear: string;
+    };
+    analysisConclusionContent: {
+      contrast: string;
+      comparedTo: string;
+      monthlyEfficiencyImprovement: string;
+      equivalentTo: string;
+      workHours: string;
+      benefitsFrom: string;
+      timeEfficiency: string;
+      timeEfficiencyCalculation: string;
+      timeSavingsPerPatient: string;
+      totalTimeSavings: string;
+      additionalExams: string;
+      additionalExamsCalculation: string;
+      monthlyTimeSavings: string;
+      examTime: string;
+      additionalExamsCount: string;
+      potentialRevenueIncrease: string;
+      costEfficiency: string;
+      costEfficiencyReference: string;
+      contrastSavings: string;
+      contrastSavingsValue: string;
+      researchValueRating: string;
+      researchValueSignificant: string;
+      researchValueSmartProtocol: string;
+      researchValueCaution: string;
+      contactForMoreInfo: string;
+      highResearchValueExplanation: string;
+      unclearResearchValueExplanation: string;
+      conclusion: string;
+      worthyInvestment: string;
+      cautiousEvaluation: string;
+      annualSavings: string;
+      smartProtocolBenefit: string;
+    };
+    charts: {
+      radarTitle: string;
+      radarSubtitle: string;
+      barTitle: string;
+      barSubtitle: string;
+      monthlySavings: string;
+      annualSavings: string;
+      roi: string;
+      monthlyContrastSavings: string;
+      comparisonNote: string;
+      economicBenefitDifference: string;
+      percentStudyNote: string;
+      and: string;
+    };
+    radarTooltips: {
+      clinicalAccuracy: string;
+      workEfficiency: string;
+      usability: string;
+      researchValue: string;
+      maintenanceConvenience: string;
+      contrastSaving: string;
+    };
+    parameterComparison: {
+      title: string;
+      valueComparison: string;
+      parameter: string;
+      comparison: string;
+      yes: string;
+      no: string;
+    };
     metrics: {
       clinicalAccuracy: string;
       workEfficiency: string;
@@ -72,6 +164,7 @@ export interface Translations {
       percent: string;
       ml: string;
       exams: string;
+      points: string;
     };
     values: {
       yes: string;
@@ -86,6 +179,7 @@ export interface Translations {
   // Footer
   footer: {
     copyright: string;
+    dataDisclaimer: string;
     version: string;
   };
   

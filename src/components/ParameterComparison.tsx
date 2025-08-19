@@ -21,9 +21,9 @@ const ParameterComparison: React.FC = () => {
     { key: "耗材更换时间_分钟", label: t.results.specifications.consumableChangeTime, unit: t.results.units.minutes, lowerIsBetter: true },
     { key: "单次检查总耗时_分钟", label: t.results.specifications.examTotalTime, unit: t.results.units.minutes, lowerIsBetter: true },
     { key: "设备10年折旧率", label: t.results.specifications.depreciationRate, unit: t.results.units.percent, lowerIsBetter: true },
-    { key: "临床精准度", label: t.results.metrics.clinicalAccuracy, unit: "分", lowerIsBetter: false },
-    { key: "科研附加值", label: t.results.metrics.researchValue, unit: "分", lowerIsBetter: false },
-    { key: "造影剂节省量", label: t.results.metrics.contrastSaving, unit: "分", lowerIsBetter: false }
+    { key: "临床精准度", label: t.results.metrics.clinicalAccuracy, unit: t.results.units.points, lowerIsBetter: false },
+    { key: "科研附加值", label: t.results.metrics.researchValue, unit: t.results.units.points, lowerIsBetter: false },
+    { key: "造影剂节省量", label: t.results.metrics.contrastSaving, unit: t.results.units.points, lowerIsBetter: false }
   ];
   
   const booleanParameters = [

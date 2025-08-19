@@ -100,7 +100,7 @@ const BarChartComponent: React.FC = () => {
         </ResponsiveContainer>
       </div>
       <div className="mt-4 text-sm text-neutral-600">
-        <p className="text-center mb-2">{t.results.charts.comparisonNote} {targetDevice.brand} {targetDevice.model} 与 {baseDevice.brand} {baseDevice.model} {t.results.charts.economicBenefitDifference}</p>
+        <p className="text-center mb-2">{t.results.charts.comparisonNote} {targetDevice.brand} {targetDevice.model} {t.results.charts.and} {baseDevice.brand} {baseDevice.model} {t.results.charts.economicBenefitDifference}</p>
         <p className="text-xs italic">
           ¹{t.results.charts.percentStudyNote}（Kemper, C.A. et.al. (2022). Performance of Centargo: A novel Piston based injection System for High Throughput in CE CT. Medical Devices(Auckland, NZ)15, 79.）
         </p>

@@ -41,12 +41,12 @@ const RadarChartComponent: React.FC = () => {
   }
 
   const tooltips = {
-    "临床精准度": "CARE研究证实活塞式高注结合主动气泡管理，对提升图像质量有显著帮助（Mcdemott MC .et.al. IEEE Trans Biomed Eng. 2021）",
-    "工作效率": "耗材更换时间成本及AutoDoc™ 信息化加持证明对患者增强检查提高了效率",
-    "易用性": "信息化加持信息化及AutoDoc™ 扫码枪功能方便加大了数据可回溯性和高注易用性",
-    "科研附加值": "个性化方案，P3T方案及KVp Set助力提升科研价值",
-    "维护便捷性": "Bayer VirtualCare及Bayer工程师团队敏捷运营",
-    "造影剂节省量": "通过智能化协议及多通道管路系统可有效减少造影剂浪费"
+    "临床精准度": t.results.radarTooltips.clinicalAccuracy,
+    "工作效率": t.results.radarTooltips.workEfficiency,
+    "易用性": t.results.radarTooltips.usability,
+    "科研附加值": t.results.radarTooltips.researchValue,
+    "维护便捷性": t.results.radarTooltips.maintenanceConvenience,
+    "造影剂节省量": t.results.radarTooltips.contrastSaving
   };
 
   return (

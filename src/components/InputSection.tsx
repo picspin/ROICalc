@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Calculator, ChevronDown } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import { useI18n } from '../contexts/I18nContext';
 import { getDeviceOptions, getDeviceById } from '../data/devices';
-import Image from './Image';
 
 const InputSection: React.FC = () => {
   const {
@@ -88,7 +87,7 @@ const InputSection: React.FC = () => {
                       }`}
                       onClick={() => setVolumeType('daily')}
                     >
-                      {t.input.volumeType.daily.split(' ')[0]}
+                      {t.input.volumeType.daily}
                     </button>
                     <button
                       type="button"
@@ -99,7 +98,7 @@ const InputSection: React.FC = () => {
                       }`}
                       onClick={() => setVolumeType('monthly')}
                     >
-                      {t.input.volumeType.monthly.split(' ')[0]}
+                      {t.input.volumeType.monthly}
                     </button>
                   </div>
                 </div>

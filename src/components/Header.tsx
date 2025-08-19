@@ -2,7 +2,6 @@ import React from 'react';
 import useAppStore from '../store/useAppStore';
 import { useI18n } from '../contexts/I18nContext';
 import LanguageToggle from './LanguageToggle';
-import Image from './Image';
 
 const Header: React.FC = () => {
   const { setActiveTab } = useAppStore();

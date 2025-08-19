@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .border-tertiary-300 {
+    border-color: #8863b3;
+  }
+  
+  .bg-tertiary-100 {
+    background-color: #e9d5ff;
+  }
+  
+  .text-tertiary-600 {
+    color: #8863b3;
+  }
+  
+  .text-tertiary-700 {
+    color: #7e22ce;
+  }
+}

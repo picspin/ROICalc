@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Calculator, ChevronDown } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
+import { useI18n } from '../contexts/I18nContext';
 import { getDeviceOptions, getDeviceById } from '../data/devices';
 import Image from './Image';
 
@@ -19,6 +20,7 @@ const InputSection: React.FC = () => {
     calculateResults
   } = useAppStore();
 
+  const { t } = useI18n();
   const deviceOptions = getDeviceOptions();
   const targetDevice = getDeviceById(targetDeviceId);
   const baseDevice = getDeviceById(baseDeviceId);
@@ -44,7 +46,7 @@ const InputSection: React.FC = () => {
                 />
               </div>
               <p className="text-sm text-center mt-3 text-neutral-600 font-medium">
-                目标设备
+                {t.input.targetDevice}
               </p>
               <p className="text-xs text-center text-neutral-500">
                 {targetDevice.brand} {targetDevice.model}
@@ -58,14 +60,14 @@ const InputSection: React.FC = () => {
           <div className="bg-white rounded-lg shadow-card p-6 animate-fade-in">
             <h2 className="text-lg font-semibold text-neutral-800 mb-6 flex items-center">
               <Calculator className="h-5 w-5 mr-2 text-primary-500" />
-              输入参数
+              {t.input.title}
             </h2>
 
             <div className="space-y-6">
               {/* Patient Volume Input */}
               <div className="space-y-2">
                 <label htmlFor="patientVolume" className="block text-sm font-medium text-neutral-700">
-                  单台CT对应患者增强量
+                  {t.input.patientVolume}
                 </label>
                 <div className="flex items-center space-x-3">
                   <input
@@ -86,7 +88,7 @@ const InputSection: React.FC = () => {
                       }`}
                       onClick={() => setVolumeType('daily')}
                     >
-                      每日
+                      {t.input.volumeType.daily.split(' ')[0]}
                     </button>
                     <button
                       type="button"
@@ -97,7 +99,7 @@ const InputSection: React.FC = () => {
                       }`}
                       onClick={() => setVolumeType('monthly')}
                     >
-                      每月
+                      {t.input.volumeType.monthly.split(' ')[0]}
                     </button>
                   </div>
                 </div>
@@ -106,7 +108,7 @@ const InputSection: React.FC = () => {
               {/* CT Device Count Input */}
               <div className="space-y-2">
                 <label htmlFor="ctDeviceCount" className="block text-sm font-medium text-neutral-700">
-                  CT设备数量
+                  {t.input.ctDeviceCount}
                 </label>
                 <input
                   id="ctDeviceCount"
@@ -123,7 +125,7 @@ const InputSection: React.FC = () => {
                 {/* Target Device Selection */}
                 <div className="space-y-2">
                   <label htmlFor="targetDevice" className="block text-sm font-medium text-neutral-700">
-                    目标设备
+                    {t.input.targetDevice}
                   </label>
                   <div className="relative">
                     <select
@@ -145,7 +147,7 @@ const InputSection: React.FC = () => {
                 {/* Comparison Device Selection */}
                 <div className="space-y-2">
                   <label htmlFor="baseDevice" className="block text-sm font-medium text-neutral-700">
-                    对比设备
+                    {t.input.baseDevice}
                   </label>
                   <div className="relative">
                     <select
@@ -170,7 +172,7 @@ const InputSection: React.FC = () => {
                 onClick={calculateResults}
                 className="w-full mt-6 flex items-center justify-center py-3 px-4 bg-primary-500 hover:bg-primary-600 text-white font-medium rounded-md transition shadow-sm hover:shadow focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"
               >
-                计算 ROI 并对比
+{t.input.calculateButton}
               </button>
             </div>
           </div>
@@ -193,7 +195,7 @@ const InputSection: React.FC = () => {
                 />
               </div>
               <p className="text-sm text-center mt-3 text-neutral-600 font-medium">
-                对比设备
+                {t.input.baseDevice}
               </p>
               <p className="text-xs text-center text-neutral-500">
                 {baseDevice.brand} {baseDevice.model}

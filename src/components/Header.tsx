@@ -1,9 +1,12 @@
 import React from 'react';
 import useAppStore from '../store/useAppStore';
+import { useI18n } from '../contexts/I18nContext';
+import LanguageToggle from './LanguageToggle';
 import Image from './Image';
 
 const Header: React.FC = () => {
   const { setActiveTab } = useAppStore();
+  const { t } = useI18n();
 
   return (
     <header className="bg-white shadow-sm">
@@ -19,15 +22,16 @@ const Header: React.FC = () => {
               onClick={() => setActiveTab('input')}
               className="text-xl font-semibold text-neutral-800 hover:text-primary-600 transition-colors"
             >
-              CT高注增强效益工具表
+              {t.header.title}
             </button>
           </div>
-          <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium text-neutral-600">数据可视化分析工具</span>
+          <div className="flex items-center space-x-4">
+            <span className="text-sm font-medium text-neutral-600">{t.header.subtitle}</span>
+            <LanguageToggle />
           </div>
         </div>
         <div className="mt-2 text-sm text-neutral-500 text-right">
-          <span>作者: Xiaolei Zhu | </span>
+          <span>{t.header.author} | </span>
           <a href="mailto:zxl1412@gmail.com" className="hover:text-primary-600">zxl1412@gmail.com</a>
         </div>
       </div>

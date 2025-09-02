@@ -10,7 +10,7 @@ function App() {
   const { activeTab, setActiveTab } = useAppStore();
 
   return (
-    <div className="flex flex-col min-h-screen bg-neutral-50 relative">
+    <div className="flex flex-col min-h-screen bg-neutral-50 relative" >
       {/* Background Pattern */}
       <div 
         className="fixed inset-0 -z-10 pointer-events-none bg-blend-soft-light opacity-5"

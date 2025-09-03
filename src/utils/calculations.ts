@@ -3,7 +3,7 @@ import { Device, CalculationResult, ComparisonRadarData } from '../types';
 // Time value in Yuan per minute (hospital technician time value)
 const TIME_VALUE_PER_MINUTE = 2;
 // Working days per month
-const WORKING_DAYS_PER_MONTH = 22;
+const WORKING_DAYS_PER_MONTH = 24;
 // Working months per year
 const WORKING_MONTHS_PER_YEAR = 12;
 // 对比剂价格（元/ml）

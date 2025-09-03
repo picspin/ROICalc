@@ -13,7 +13,7 @@ export const devicesData: DevicesData = {
       "imageUrl": "/images/devices/Bayer-Centargo.png",
       "specs": {
         "耗材更换时间_分钟": 0.33,
-        "单次检查总耗时_分钟": 5,
+        "单次检查总耗时_分钟": 10,
         "信息化支持": true,
         "智能协议支持": true,
         "单次检查耗材成本_元": 100,
@@ -38,7 +38,7 @@ export const devicesData: DevicesData = {
       "imageUrl": "/images/devices/Ulrich-CTMotion.png",
       "specs": {
         "耗材更换时间_分钟": 2,
-        "单次检查总耗时_分钟": 7,
+        "单次检查总耗时_分钟": 13,
         "信息化支持": true,
         "智能协议支持": false,
         "单次检查耗材成本_元": 110,
@@ -63,7 +63,7 @@ export const devicesData: DevicesData = {
       "imageUrl": "/images/devices/Guerbet-Optivantage.png",
       "specs": {
         "耗材更换时间_分钟": 3,
-        "单次检查总耗时_分钟": 8,
+        "单次检查总耗时_分钟": 15,
         "信息化支持": true,
         "智能协议支持": false,
         "单次检查耗材成本_元": 125,
@@ -88,7 +88,7 @@ export const devicesData: DevicesData = {
       "imageUrl": "/images/devices/Bayer-Stellant.png",
       "specs": {
         "耗材更换时间_分钟": 3,
-        "单次检查总耗时_分钟": 10,
+        "单次检查总耗时_分钟": 14,
         "信息化支持": true,
         "智能协议支持": false,
         "单次检查耗材成本_元": 110,
@@ -113,7 +113,7 @@ export const devicesData: DevicesData = {
       "imageUrl": "/images/devices/Clear-Edot.png",
       "specs": {
         "耗材更换时间_分钟": 2,
-        "单次检查总耗时_分钟": 8,
+        "单次检查总耗时_分钟": 15,
         "信息化支持": true,
         "智能协议支持": false,
         "单次检查耗材成本_元": 120,
@@ -138,7 +138,7 @@ export const devicesData: DevicesData = {
       "imageUrl": "/images/devices/Medtron-Accutron.png",
       "specs": {
         "耗材更换时间_分钟": 3,
-        "单次检查总耗时_分钟": 10,
+        "单次检查总耗时_分钟": 15,
         "信息化支持": false,
         "智能协议支持": false,
         "单次检查耗材成本_元": 88,

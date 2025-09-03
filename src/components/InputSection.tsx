@@ -11,11 +11,13 @@ const InputSection: React.FC = () => {
     targetDeviceId,
     baseDeviceId,
     ctDeviceCount,
+    ctEnhancementRate,
     setPatientVolume,
     setVolumeType,
     setTargetDeviceId,
     setBaseDeviceId,
     setCtDeviceCount,
+    setCtEnhancementRate,
     calculateResults
   } = useAppStore();
 
@@ -117,6 +119,28 @@ const InputSection: React.FC = () => {
                   onChange={(e) => setCtDeviceCount(Number(e.target.value))}
                   className="w-full rounded-md border border-neutral-300 px-3 py-2 text-neutral-800 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition"
                 />
+              </div>
+
+              {/* CT Enhancement Rate Input */}
+              <div className="space-y-2">
+                <label htmlFor="ctEnhancementRate" className="block text-sm font-medium text-neutral-700">
+                  {t.input.ctEnhancementRate}
+                </label>
+                <div className="relative">
+                  <input
+                    id="ctEnhancementRate"
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={ctEnhancementRate}
+                    onChange={(e) => setCtEnhancementRate(Number(e.target.value))}
+                    className="w-full rounded-md border border-neutral-300 px-3 py-2 pr-8 text-neutral-800 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 transition"
+                  />
+                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-500 text-sm">%</span>
+                </div>
+                <p className="text-xs text-neutral-500 mt-1">
+                  {t.input.enhancementRateHelper}
+                </p>
               </div>
 
               {/* Device Selections - Two column layout on larger screens */}

@@ -9,7 +9,8 @@ import {
   formatPercent,
   formatNumber,
   formatVolume,
-  calculateExtraCTExams
+  calculateExtraCTExams,
+  calculateAdditionalRevenue
 } from '../calculations';
 import { Device } from '../../types';
 
@@ -69,23 +70,25 @@ const mockTargetDevice: Device = {
 describe('Calculation Functions', () => {
   describe('calculateDeltaP', () => {
     it('should calculate time efficiency savings correctly for daily input', () => {
-      const result = calculateDeltaP(mockBaseDevice, mockTargetDevice, 50, true);
+      const result = calculateDeltaP(mockBaseDevice, mockTargetDevice, 50, true, 60);
       
       // Expected calculation:
       // Time saved per patient: 7 - 5 = 2 minutes
       // Consumable change saving per patient: (2 - 0.33) / 50 = 0.0334 minutes
       // Total time saved per patient: 2 + 0.0334 = 2.0334 minutes
-      // Monthly volume: 50 * 22 = 1100 patients
-      // Monthly savings: 2.0334 * 1100 * 2 = 4473.48 yuan
+      // Monthly volume: 50 * 24 = 1200 patients (updated to match WORKING_DAYS_PER_MONTH)
+      // Enhancement rate: 60% = 0.6
+      // Monthly savings: 2.0334 * 1200 * 0.6 * 2 = 2928.096 yuan
       
-      expect(result).toBeCloseTo(4473.48, 1);
+      expect(result).toBeCloseTo(2928.096, 1);
     });
 
     it('should calculate time efficiency savings correctly for monthly input', () => {
-      const result = calculateDeltaP(mockBaseDevice, mockTargetDevice, 1100, false);
+      const result = calculateDeltaP(mockBaseDevice, mockTargetDevice, 1100, false, 60);
       
       // Same calculation but monthly volume is used directly
-      expect(result).toBeCloseTo(4473.48, 1);
+      // 2.0334 * 1100 * 0.6 * 2 = 2684.088 yuan
+      expect(result).toBeCloseTo(2684.088, 1);
     });
 
     it('should handle zero time difference', () => {
@@ -93,7 +96,7 @@ describe('Calculation Functions', () => {
       sameTimeDevice.specs["单次检查总耗时_分钟"] = 7;
       sameTimeDevice.specs["耗材更换时间_分钟"] = 2;
       
-      const result = calculateDeltaP(mockBaseDevice, sameTimeDevice, 50, true);
+      const result = calculateDeltaP(mockBaseDevice, sameTimeDevice, 50, true, 60);
       expect(result).toBe(0);
     });
   });
@@ -129,12 +132,12 @@ describe('Calculation Functions', () => {
       const result = calculateDeltaV(mockBaseDevice, mockTargetDevice, 50, true, contrastSavings);
       
       // Consumable cost saving per patient: 110 - 100 = 10 yuan
-      // Monthly volume: 50 * 22 = 1100
-      // Consumable savings: 10 * 1100 = 11000 yuan
+      // Monthly volume: 50 * 24 = 1200 (updated to match WORKING_DAYS_PER_MONTH)
+      // Consumable savings: 10 * 1200 = 12000 yuan
       // Contrast savings: 1000 * 2 = 2000 yuan
-      // Total: 13000 yuan
+      // Total: 14000 yuan
       
-      expect(result).toBe(13000);
+      expect(result).toBe(14000);
     });
 
     it('should handle negative consumable cost difference', () => {
@@ -144,17 +147,17 @@ describe('Calculation Functions', () => {
       const result = calculateDeltaV(mockBaseDevice, expensiveTargetDevice, 50, true, 1000);
       
       // Consumable cost difference: 110 - 150 = -40 yuan per patient
-      // Monthly: -40 * 1100 = -44000 yuan
+      // Monthly: -40 * 1200 = -48000 yuan (updated to match WORKING_DAYS_PER_MONTH = 24)
       // Plus contrast savings: 2000 yuan
-      // Total: -42000 yuan
+      // Total: -46000 yuan
       
-      expect(result).toBe(-42000);
+      expect(result).toBe(-46000);
     });
   });
 
   describe('calculateROI', () => {
     it('should calculate complete ROI analysis', () => {
-      const result = calculateROI(mockBaseDevice, mockTargetDevice, 50, true);
+      const result = calculateROI(mockBaseDevice, mockTargetDevice, 50, true, 60);
       
       expect(result).toHaveProperty('deltaP');
       expect(result).toHaveProperty('deltaV');
@@ -162,23 +165,26 @@ describe('Calculation Functions', () => {
       expect(result).toHaveProperty('monthlySavings');
       expect(result).toHaveProperty('annualSavings');
       expect(result).toHaveProperty('contrastSavings');
+      expect(result).toHaveProperty('additionalRevenue');
       
       expect(result.deltaP).toBeGreaterThanOrEqual(0);
       // deltaV can be negative if target device has higher consumable costs
       expect(typeof result.deltaV).toBe('number');
       expect(result.monthlySavings).toBe(result.deltaP + result.deltaV);
       expect(result.annualSavings).toBe(result.monthlySavings * 12);
+      expect(typeof result.additionalRevenue).toBe('number');
     });
 
     it('should handle higher cost target device', () => {
       const expensiveDevice = { ...mockTargetDevice };
       expensiveDevice.specs["设备采购成本_万元"] = 50;
       
-      const result = calculateROI(mockBaseDevice, expensiveDevice, 50, true);
+      const result = calculateROI(mockBaseDevice, expensiveDevice, 50, true, 60);
       
       // Should still calculate ROI even with higher investment
       expect(result.roi).toBeDefined();
       expect(typeof result.roi).toBe('number');
+      expect(result.additionalRevenue).toBeDefined();
     });
   });
 
@@ -255,6 +261,35 @@ describe('Calculation Functions', () => {
       // 1.5 hours = 90 minutes
       // 90 / 7 ≈ 12.86 exams
       expect(result).toBeCloseTo(12.86, 2);
+    });
+  });
+
+  describe('calculateAdditionalRevenue', () => {
+    it('should calculate additional revenue from saved time', () => {
+      const result = calculateAdditionalRevenue(mockBaseDevice, mockTargetDevice, 50, true, 60);
+      
+      // Should return a number representing potential additional revenue
+      expect(typeof result).toBe('number');
+      expect(result).toBeGreaterThanOrEqual(0);
+    });
+
+    it('should handle different enhancement rates', () => {
+      const result100 = calculateAdditionalRevenue(mockBaseDevice, mockTargetDevice, 50, true, 100);
+      const result50 = calculateAdditionalRevenue(mockBaseDevice, mockTargetDevice, 50, true, 50);
+      
+      // Both should return numbers
+      expect(typeof result100).toBe('number');
+      expect(typeof result50).toBe('number');
+      expect(result100).toBeGreaterThanOrEqual(0);
+      expect(result50).toBeGreaterThanOrEqual(0);
+    });
+
+    it('should handle zero enhancement rate', () => {
+      const result = calculateAdditionalRevenue(mockBaseDevice, mockTargetDevice, 50, true, 0);
+      
+      // With 0% enhancement rate, there should still be some revenue from plain scans
+      expect(typeof result).toBe('number');
+      expect(result).toBeGreaterThanOrEqual(0);
     });
   });
 });

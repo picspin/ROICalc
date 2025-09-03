@@ -19,7 +19,7 @@ const ResultsSection: React.FC = () => {
     return null;
   }
   
-  const { deltaP, deltaV, roi, monthlySavings, annualSavings, contrastSavings } = calculationResult;
+  const { deltaP, deltaV, roi, monthlySavings, annualSavings, contrastSavings, additionalRevenue } = calculationResult;
   
   // Determine if investment is worthy based on ROI
   const isWorthyInvestment = roi > 15;
@@ -82,7 +82,7 @@ const ResultsSection: React.FC = () => {
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Key Metrics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Work efficiency improvement - highlighted */}
         <div className="bg-white rounded-lg shadow-card p-6 hover:shadow-card-hover transition-shadow border-2 border-primary-300">
           <div className="flex items-center space-x-3 mb-3">
@@ -130,6 +130,24 @@ const ResultsSection: React.FC = () => {
           </p>
           <p className="text-sm text-neutral-600 mt-2">
             {t.results.charts.monthlyContrastSavings}，{t.results.analysisConclusionContent.equivalentTo} <span className="font-semibold">{formatCurrency(contrastSavingsCost)}</span>
+          </p>
+        </div>
+
+        {/* Additional Revenue Card */}
+        <div className="bg-white rounded-lg shadow-card p-6 hover:shadow-card-hover transition-shadow border-2 border-purple-300">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="bg-purple-100 p-3 rounded-full">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 className="text-base font-medium text-neutral-700">{t.results.additionalRevenue}</h3>
+          </div>
+          <p className="text-3xl font-bold text-purple-700">
+            {formatCurrency(additionalRevenue)}
+          </p>
+          <p className="text-sm text-neutral-600 mt-2">
+            每月潜在额外收益
           </p>
         </div>
       </div>

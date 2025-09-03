@@ -21,6 +21,7 @@ interface AppState {
   targetDeviceId: string;
   baseDeviceId: string;
   ctDeviceCount: number;
+  ctEnhancementRate: number; // New: 0-100 percentage
   
   // Result state
   calculationResult: CalculationResult | null;
@@ -36,6 +37,7 @@ interface AppState {
   setTargetDeviceId: (id: string) => void;
   setBaseDeviceId: (id: string) => void;
   setCtDeviceCount: (count: number) => void;
+  setCtEnhancementRate: (rate: number) => void;
   calculateResults: () => void;
   setActiveTab: (tab: 'input' | 'results') => void;
 }
@@ -47,6 +49,7 @@ const useAppStore = create<AppState>((set, get) => ({
   targetDeviceId: 'Bayer-Centargo',
   baseDeviceId: getBaseDevice(),
   ctDeviceCount: 1,
+  ctEnhancementRate: 60, // Default 60% enhancement rate
   
   // Default result state
   calculationResult: null,
@@ -67,10 +70,12 @@ const useAppStore = create<AppState>((set, get) => ({
   
   setCtDeviceCount: (count) => set({ ctDeviceCount: count }),
   
+  setCtEnhancementRate: (rate) => set({ ctEnhancementRate: Math.max(0, Math.min(100, rate)) }),
+  
   calculateResults: () => {
     set({ isLoading: true });
     
-    const { patientVolume, volumeType, targetDeviceId, baseDeviceId } = get();
+    const { patientVolume, volumeType, targetDeviceId, baseDeviceId, ctEnhancementRate } = get();
     const isDaily = volumeType === 'daily';
     
     const targetDevice = getDeviceById(targetDeviceId);
@@ -90,7 +95,8 @@ const useAppStore = create<AppState>((set, get) => ({
       baseDevice,
       targetDevice,
       patientVolume,
-      isDaily
+      isDaily,
+      ctEnhancementRate
     );
     
     // Generate radar chart data

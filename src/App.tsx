@@ -4,10 +4,12 @@ import Footer from './components/Footer';
 import InputSection from './components/InputSection';
 import ResultsSection from './components/ResultsSection';
 import useAppStore from './store/useAppStore';
+import { useI18n } from './contexts/I18nContext';
 import { ArrowLeft, Settings, PieChart } from 'lucide-react';
 
 function App() {
   const { activeTab, setActiveTab } = useAppStore();
+  const { t } = useI18n();
 
   return (
     <div className="flex flex-col min-h-screen bg-neutral-50 relative" >
@@ -43,7 +45,7 @@ function App() {
                 }`}
               >
                 <Settings className="h-4 w-4" />
-                <span>参数设置</span>
+                <span>{t.nav.parameterSettings}</span>
               </button>
               <button
                 onClick={() => setActiveTab('results')}
@@ -54,7 +56,7 @@ function App() {
                 }`}
               >
                 <PieChart className="h-4 w-4" />
-                <span>结果分析</span>
+                <span>{t.nav.resultsAnalysis}</span>
               </button>
             </nav>
           </div>
@@ -67,7 +69,7 @@ function App() {
             className="flex items-center text-sm text-neutral-600 hover:text-primary-600 mb-4 transition"
           >
             <ArrowLeft className="h-4 w-4 mr-1" />
-            返回参数设置
+{t.nav.backToSettings}
           </button>
         )}
         

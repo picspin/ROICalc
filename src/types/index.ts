@@ -39,6 +39,7 @@ export interface CalculationResult {
   monthlySavings: number;
   annualSavings: number;
   contrastSavings: number;
+  additionalRevenue: number; // New: potential additional revenue from saved time
 }
 
 export interface ComparisonRadarData {
@@ -54,4 +55,5 @@ export interface InputData {
   targetDeviceId: string;
   baseDeviceId: string;
   ctDeviceCount: number;
+  ctEnhancementRate: number; // New: 0-100 percentage
 }

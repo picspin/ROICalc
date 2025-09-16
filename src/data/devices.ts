@@ -60,7 +60,7 @@ export const devicesData: DevicesData = {
       "model": "OptiVantage",
       "category": "高压注射器",
       "isBase": false,
-      "imageUrl": "/images/devices/Guerbet-Optivantage.png",
+      "imageUrl": "/images/devices/Guerbet-OptiVantage.png",
       "specs": {
         "耗材更换时间_分钟": 10,
         "单次检查总耗时_分钟": 15,

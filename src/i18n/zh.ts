@@ -44,6 +44,7 @@ export const zhTranslations: Translations = {
     parameterComparisonTitle: '参数对比',
     additionalExams: '可增加检查数量',
     additionalRevenue: '潜在额外收益',
+    revenueDescription: '省下的对比剂成本+多做检查量带来的收益',
     revenueMethodology: '收益计算方法',
     feeStandards: '检查费用标准',
     enhancedFee: 'CT增强检查费用',

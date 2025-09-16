@@ -44,6 +44,7 @@ export const enTranslations: Translations = {
     parameterComparisonTitle: 'Parameter Comparison',
     additionalExams: 'Additional Exams Possible',
     additionalRevenue: 'Potential Additional Revenue',
+    revenueDescription: 'iodine cost saving + additional exam benefit',
     revenueMethodology: 'Revenue Calculation Method',
     feeStandards: 'Examination Fee Standards',
     enhancedFee: 'CT Enhanced Exam Fee',

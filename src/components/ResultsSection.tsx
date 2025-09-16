@@ -3,13 +3,13 @@ import { Clock, PlusCircle } from 'lucide-react';
 import useAppStore from '../store/useAppStore';
 import { useI18n } from '../contexts/I18nContext';
 import { getDeviceById } from '../data/devices';
-import { formatCurrency, formatPercent, formatVolume, calculateExtraCTExams } from '../utils/calculations';
+import { formatCurrency, formatPercent, formatVolume, calculateTotalAdditionalExams, calculateActualAdditionalRevenue } from '../utils/calculations';
 import BarChartComponent from './charts/BarChart';
 import RadarChartComponent from './charts/RadarChart';
 import ParameterComparison from './ParameterComparison';
 
 const ResultsSection: React.FC = () => {
-  const { calculationResult, targetDeviceId, baseDeviceId } = useAppStore();
+  const { calculationResult, targetDeviceId, baseDeviceId, patientVolume, volumeType, ctEnhancementRate } = useAppStore();
   const { t } = useI18n();
   
   const targetDevice = getDeviceById(targetDeviceId);
@@ -19,7 +19,7 @@ const ResultsSection: React.FC = () => {
     return null;
   }
   
-  const { deltaP, deltaV, roi, monthlySavings, annualSavings, contrastSavings, additionalRevenue } = calculationResult;
+  const { deltaP, deltaV, roi, annualSavings, contrastSavings, additionalRevenue } = calculationResult;
   
   // Determine if investment is worthy based on ROI
   const isWorthyInvestment = roi > 15;
@@ -29,12 +29,12 @@ const ResultsSection: React.FC = () => {
   const monthlyWorkingHours = 24 * 10; // 24 days * 10 hours
   const efficiencyImprovement = ((monthlyWorkingHours / (monthlyWorkingHours - monthlyTimeSaved)) - 1) * 100;
 
-  // Calculate extra CT examinations that can be performed with saved time
-  const monthlyExtraCT = calculateExtraCTExams(monthlyTimeSaved, targetDevice.specs["单次检查总耗时_分钟"]);
+  // Calculate extra CT examinations that can be performed with saved time using consistent calculation
+  const isDaily = volumeType === 'daily';
+  const monthlyExtraCT = calculateTotalAdditionalExams(baseDevice, targetDevice, patientVolume, isDaily, ctEnhancementRate);
   
-  // Calculate potential extra revenue (assuming 250 Yuan per CT exam)
-  const ctExamRevenue = 250; // Yuan per exam
-  const potentialExtraRevenue = monthlyExtraCT * ctExamRevenue;
+  // Use actual additional revenue calculation function for consistency
+  const potentialExtraRevenue = calculateActualAdditionalRevenue(baseDevice, targetDevice, patientVolume, isDaily, ctEnhancementRate);
 
   // Calculate contrast agent savings cost
   const contrastSavingsCost = contrastSavings * 2.7; // 2.7 Yuan/ml
@@ -144,10 +144,10 @@ const ResultsSection: React.FC = () => {
             <h3 className="text-base font-medium text-neutral-700">{t.results.additionalRevenue}</h3>
           </div>
           <p className="text-3xl font-bold text-purple-700">
-            {formatCurrency(additionalRevenue)}
+            {formatCurrency(potentialExtraRevenue)}
           </p>
           <p className="text-sm text-neutral-600 mt-2">
-            每月潜在额外收益
+            {t.results.revenueDescription}
           </p>
         </div>
       </div>

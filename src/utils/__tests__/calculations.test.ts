@@ -10,7 +10,12 @@ import {
   formatNumber,
   formatVolume,
   calculateExtraCTExams,
-  calculateAdditionalRevenue
+  calculateAdditionalRevenue,
+  calculateTotalAdditionalExams,
+  calculateActualAdditionalRevenue,
+  calculateMonthlyRevenueBreakdown,
+  generateCumulativeRevenueData,
+  generateCumulativeRevenueChartData
 } from '../calculations';
 import { Device } from '../../types';
 
@@ -265,6 +270,70 @@ describe('Calculation Functions', () => {
     });
   });
 
+  describe('calculateTotalAdditionalExams', () => {
+    it('should calculate total additional exams (enhanced + plain)', () => {
+      const result = calculateTotalAdditionalExams(mockBaseDevice, mockTargetDevice, 50, true, 60);
+      
+      // Should return a number representing total additional exams
+      expect(typeof result).toBe('number');
+      expect(result).toBeGreaterThanOrEqual(0);
+    });
+
+    it('should handle different enhancement rates', () => {
+      const result100 = calculateTotalAdditionalExams(mockBaseDevice, mockTargetDevice, 50, true, 100);
+      const result50 = calculateTotalAdditionalExams(mockBaseDevice, mockTargetDevice, 50, true, 50);
+      const result0 = calculateTotalAdditionalExams(mockBaseDevice, mockTargetDevice, 50, true, 0);
+      
+      // All should return valid numbers
+      expect(typeof result100).toBe('number');
+      expect(typeof result50).toBe('number');
+      expect(typeof result0).toBe('number');
+      expect(result100).toBeGreaterThanOrEqual(0);
+      expect(result50).toBeGreaterThanOrEqual(0);
+      expect(result0).toBeGreaterThanOrEqual(0);
+    });
+
+    it('should handle monthly vs daily input', () => {
+      const dailyResult = calculateTotalAdditionalExams(mockBaseDevice, mockTargetDevice, 50, true, 60);
+      const monthlyResult = calculateTotalAdditionalExams(mockBaseDevice, mockTargetDevice, 1200, false, 60);
+      
+      // Results should be similar (50 daily * 24 days = 1200 monthly)
+      expect(Math.abs(dailyResult - monthlyResult)).toBeLessThan(1);
+    });
+  });
+
+  describe('calculateActualAdditionalRevenue', () => {
+    it('should calculate actual additional revenue from saved time', () => {
+      const result = calculateActualAdditionalRevenue(mockBaseDevice, mockTargetDevice, 50, true, 60);
+      
+      // Should return a number representing actual additional revenue
+      expect(typeof result).toBe('number');
+      expect(result).toBeGreaterThanOrEqual(0);
+    });
+
+    it('should match calculateAdditionalRevenue result', () => {
+      const actualResult = calculateActualAdditionalRevenue(mockBaseDevice, mockTargetDevice, 50, true, 60);
+      const additionalResult = calculateAdditionalRevenue(mockBaseDevice, mockTargetDevice, 50, true, 60);
+      
+      // Both functions should return the same result for consistency
+      expect(actualResult).toBe(additionalResult);
+    });
+
+    it('should handle different enhancement rates consistently', () => {
+      const result100 = calculateActualAdditionalRevenue(mockBaseDevice, mockTargetDevice, 50, true, 100);
+      const result50 = calculateActualAdditionalRevenue(mockBaseDevice, mockTargetDevice, 50, true, 50);
+      const result0 = calculateActualAdditionalRevenue(mockBaseDevice, mockTargetDevice, 50, true, 0);
+      
+      // All should return valid numbers
+      expect(typeof result100).toBe('number');
+      expect(typeof result50).toBe('number');
+      expect(typeof result0).toBe('number');
+      expect(result100).toBeGreaterThanOrEqual(0);
+      expect(result50).toBeGreaterThanOrEqual(0);
+      expect(result0).toBeGreaterThanOrEqual(0);
+    });
+  });
+
   describe('calculateAdditionalRevenue', () => {
     it('should calculate additional revenue from saved time', () => {
       const result = calculateAdditionalRevenue(mockBaseDevice, mockTargetDevice, 50, true, 60);
@@ -291,6 +360,176 @@ describe('Calculation Functions', () => {
       // With 0% enhancement rate, there should still be some revenue from plain scans
       expect(typeof result).toBe('number');
       expect(result).toBeGreaterThanOrEqual(0);
+    });
+  });
+
+  describe('calculateMonthlyRevenueBreakdown', () => {
+    it('should calculate monthly revenue breakdown correctly', () => {
+      const result = calculateMonthlyRevenueBreakdown(mockTargetDevice, 1000, 60, 500, 10000);
+      
+      // Enhanced scans: 1000 * 0.6 = 600 scans
+      // Plain scans: 1000 * 0.4 = 400 scans
+      // Enhanced revenue: 600 * 269.5 = 161700 yuan
+      // Plain revenue: 400 * 228 = 91200 yuan
+      // Contrast savings: 500 * 2.7 = 1350 yuan
+      // Additional exam revenue: 10000 yuan
+      // Total: 161700 + 91200 + 1350 + 10000 = 264250 yuan
+      
+      expect(result.enhancedScans.count).toBe(600);
+      expect(result.enhancedScans.revenue).toBe(161700);
+      expect(result.plainScans.count).toBe(400);
+      expect(result.plainScans.revenue).toBe(91200);
+      expect(result.contrastSavings).toBe(1350);
+      expect(result.additionalExamRevenue).toBe(10000);
+      expect(result.totalMonthlyRevenue).toBe(264250);
+    });
+
+    it('should handle zero enhancement rate', () => {
+      const result = calculateMonthlyRevenueBreakdown(mockTargetDevice, 1000, 0, 0, 0);
+      
+      // All scans should be plain scans
+      expect(result.enhancedScans.count).toBe(0);
+      expect(result.plainScans.count).toBe(1000);
+      expect(result.plainScans.revenue).toBe(228000); // 1000 * 228
+      expect(result.contrastSavings).toBe(0);
+      expect(result.additionalExamRevenue).toBe(0);
+      expect(result.totalMonthlyRevenue).toBe(228000);
+    });
+
+    it('should handle 100% enhancement rate', () => {
+      const result = calculateMonthlyRevenueBreakdown(mockTargetDevice, 1000, 100, 1000, 5000);
+      
+      // All scans should be enhanced scans
+      expect(result.enhancedScans.count).toBe(1000);
+      expect(result.enhancedScans.revenue).toBe(269500); // 1000 * 269.5
+      expect(result.plainScans.count).toBe(0);
+      expect(result.plainScans.revenue).toBe(0);
+      expect(result.contrastSavings).toBe(2700); // 1000 * 2.7
+      expect(result.additionalExamRevenue).toBe(5000);
+      expect(result.totalMonthlyRevenue).toBe(277200);
+    });
+  });
+
+  describe('generateCumulativeRevenueData', () => {
+    it('should generate 12-month cumulative revenue data', () => {
+      const result = generateCumulativeRevenueData(mockBaseDevice, mockTargetDevice, 50, true, 60);
+      
+      expect(result.baselineDevice).toHaveLength(12);
+      expect(result.targetDevice).toHaveLength(12);
+      expect(result.monthlySavings).toHaveLength(12);
+      expect(result.cumulativeSavings).toHaveLength(12);
+      
+      // Each month should have consistent data structure
+      result.baselineDevice.forEach(breakdown => {
+        expect(breakdown).toHaveProperty('enhancedScans');
+        expect(breakdown).toHaveProperty('plainScans');
+        expect(breakdown).toHaveProperty('contrastSavings');
+        expect(breakdown).toHaveProperty('additionalExamRevenue');
+        expect(breakdown).toHaveProperty('totalMonthlyRevenue');
+      });
+      
+      result.targetDevice.forEach(breakdown => {
+        expect(breakdown).toHaveProperty('enhancedScans');
+        expect(breakdown).toHaveProperty('plainScans');
+        expect(breakdown).toHaveProperty('contrastSavings');
+        expect(breakdown).toHaveProperty('additionalExamRevenue');
+        expect(breakdown).toHaveProperty('totalMonthlyRevenue');
+      });
+      
+      // Cumulative savings should be increasing
+      for (let i = 1; i < result.cumulativeSavings.length; i++) {
+        expect(result.cumulativeSavings[i]).toBeGreaterThanOrEqual(result.cumulativeSavings[i - 1]);
+      }
+    });
+
+    it('should handle custom month count', () => {
+      const result = generateCumulativeRevenueData(mockBaseDevice, mockTargetDevice, 50, true, 60, 6);
+      
+      expect(result.baselineDevice).toHaveLength(6);
+      expect(result.targetDevice).toHaveLength(6);
+      expect(result.monthlySavings).toHaveLength(6);
+      expect(result.cumulativeSavings).toHaveLength(6);
+    });
+
+    it('should calculate baseline device with no additional benefits', () => {
+      const result = generateCumulativeRevenueData(mockBaseDevice, mockTargetDevice, 50, true, 60);
+      
+      // Baseline device should have no contrast savings or additional exam revenue
+      result.baselineDevice.forEach(breakdown => {
+        expect(breakdown.contrastSavings).toBe(0);
+        expect(breakdown.additionalExamRevenue).toBe(0);
+      });
+    });
+
+    it('should calculate target device with additional benefits', () => {
+      const result = generateCumulativeRevenueData(mockBaseDevice, mockTargetDevice, 50, true, 60);
+      
+      // Target device should have contrast savings and additional exam revenue
+      result.targetDevice.forEach(breakdown => {
+        expect(breakdown.contrastSavings).toBeGreaterThanOrEqual(0);
+        expect(breakdown.additionalExamRevenue).toBeGreaterThanOrEqual(0);
+      });
+    });
+
+    it('should handle monthly vs daily input consistently', () => {
+      const dailyResult = generateCumulativeRevenueData(mockBaseDevice, mockTargetDevice, 50, true, 60);
+      const monthlyResult = generateCumulativeRevenueData(mockBaseDevice, mockTargetDevice, 1200, false, 60);
+      
+      // Results should be similar (50 daily * 24 days = 1200 monthly)
+      expect(Math.abs(dailyResult.monthlySavings[0] - monthlyResult.monthlySavings[0])).toBeLessThan(100);
+    });
+  });
+
+  describe('generateCumulativeRevenueChartData', () => {
+    it('should convert cumulative model to chart data format', () => {
+      const cumulativeModel = generateCumulativeRevenueData(mockBaseDevice, mockTargetDevice, 50, true, 60);
+      const chartData = generateCumulativeRevenueChartData(cumulativeModel);
+      
+      expect(chartData).toHaveLength(12);
+      
+      chartData.forEach((dataPoint, index) => {
+        expect(dataPoint.month).toBe(index + 1);
+        expect(dataPoint).toHaveProperty('baseDeviceRevenue');
+        expect(dataPoint).toHaveProperty('targetDeviceRevenue');
+        expect(dataPoint).toHaveProperty('cumulativeBaseline');
+        expect(dataPoint).toHaveProperty('cumulativeTarget');
+        expect(dataPoint).toHaveProperty('monthlySavings');
+        
+        // Cumulative values should be increasing
+        if (index > 0) {
+          expect(dataPoint.cumulativeBaseline).toBeGreaterThanOrEqual(chartData[index - 1].cumulativeBaseline);
+          expect(dataPoint.cumulativeTarget).toBeGreaterThanOrEqual(chartData[index - 1].cumulativeTarget);
+        }
+      });
+    });
+
+    it('should calculate cumulative values correctly', () => {
+      const cumulativeModel = generateCumulativeRevenueData(mockBaseDevice, mockTargetDevice, 50, true, 60);
+      const chartData = generateCumulativeRevenueChartData(cumulativeModel);
+      
+      // First month cumulative should equal first month revenue
+      expect(chartData[0].cumulativeBaseline).toBe(chartData[0].baseDeviceRevenue);
+      expect(chartData[0].cumulativeTarget).toBe(chartData[0].targetDeviceRevenue);
+      
+      // Second month cumulative should equal sum of first two months
+      if (chartData.length > 1) {
+        const expectedBaseline = chartData[0].baseDeviceRevenue + chartData[1].baseDeviceRevenue;
+        const expectedTarget = chartData[0].targetDeviceRevenue + chartData[1].targetDeviceRevenue;
+        
+        expect(chartData[1].cumulativeBaseline).toBeCloseTo(expectedBaseline, 2);
+        expect(chartData[1].cumulativeTarget).toBeCloseTo(expectedTarget, 2);
+      }
+    });
+
+    it('should maintain consistency with monthly savings', () => {
+      const cumulativeModel = generateCumulativeRevenueData(mockBaseDevice, mockTargetDevice, 50, true, 60);
+      const chartData = generateCumulativeRevenueChartData(cumulativeModel);
+      
+      chartData.forEach((dataPoint, index) => {
+        const expectedSavings = dataPoint.targetDeviceRevenue - dataPoint.baseDeviceRevenue;
+        expect(dataPoint.monthlySavings).toBeCloseTo(expectedSavings, 2);
+        expect(dataPoint.monthlySavings).toBe(cumulativeModel.monthlySavings[index]);
+      });
     });
   });
 });

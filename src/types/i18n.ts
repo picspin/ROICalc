@@ -26,6 +26,8 @@ export interface Translations {
     targetDevice: string;
     baseDevice: string;
     ctDeviceCount: string;
+    ctEnhancementRate: string;
+    enhancementRateHelper: string;
     calculateButton: string;
     deviceSelection: {
       target: string;
@@ -45,6 +47,8 @@ export interface Translations {
     performanceComparison: string;
     parameterComparisonTitle: string;
     additionalExams: string;
+    additionalRevenue: string;
+    revenueDescription: string;
     workEfficiencyImprovement: string;
     monthlyExamIncrease: string;
     analysisConclusion: string;

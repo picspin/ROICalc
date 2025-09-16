@@ -124,6 +124,16 @@ export interface Translations {
       economicBenefitDifference: string;
       percentStudyNote: string;
       and: string;
+      cumulativeTitle: string;
+      cumulativeSubtitle: string;
+      timeMonths: string;
+      cumulativeRevenue: string;
+      cumulativeNote1: string;
+      cumulativeNote2: string;
+      cumulativeNote3: string;
+      cumulativeSavings: string;
+      baseRevenue: string;
+      targetRevenue: string;
     };
     radarTooltips: {
       clinicalAccuracy: string;

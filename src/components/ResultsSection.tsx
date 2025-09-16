@@ -6,33 +6,43 @@ import { getDeviceById } from '../data/devices';
 import { formatCurrency, formatPercent, formatVolume, calculateTotalAdditionalExams, calculateActualAdditionalRevenue } from '../utils/calculations';
 import BarChartComponent from './charts/BarChart';
 import RadarChartComponent from './charts/RadarChart';
+import CumulativeRevenueChart from './charts/CumulativeRevenueChart';
 import ParameterComparison from './ParameterComparison';
 
 const ResultsSection: React.FC = () => {
   const { calculationResult, targetDeviceId, baseDeviceId, patientVolume, volumeType, ctEnhancementRate } = useAppStore();
   const { t } = useI18n();
-  
+
   const targetDevice = getDeviceById(targetDeviceId);
   const baseDevice = getDeviceById(baseDeviceId);
-  
+
   if (!calculationResult || !targetDevice || !baseDevice) {
     return null;
   }
-  
-  const { deltaP, deltaV, roi, annualSavings, contrastSavings, additionalRevenue } = calculationResult;
-  
+
+  const { deltaP, deltaV, roi, annualSavings, contrastSavings } = calculationResult;
+
   // Determine if investment is worthy based on ROI
   const isWorthyInvestment = roi > 15;
 
-  // Calculate monthly time value saved in hours
-  const monthlyTimeSaved = deltaP / 1 / 60; // Convert from Yuan (1 Yuan/min) to hours
+  // Calculate monthly time saved in hours using consistent calculation method
+  const monthlyVolume = volumeType === 'daily' ? patientVolume * 24 : patientVolume;
+  const enhancementRateDecimal = ctEnhancementRate / 100;
+  const baseExamTime = baseDevice.specs["单次检查总耗时_分钟"];
+  const targetExamTime = targetDevice.specs["单次检查总耗时_分钟"];
+  const timeSavedPerPatient = baseExamTime - targetExamTime;
+  const baseConsumableTime = baseDevice.specs["耗材更换时间_分钟"];
+  const targetConsumableTime = targetDevice.specs["耗材更换时间_分钟"];
+  const consumableTimeSavedPerPatient = (baseConsumableTime - targetConsumableTime) / 50;
+  const totalTimeSavedMinutes = (timeSavedPerPatient + consumableTimeSavedPerPatient) * monthlyVolume * enhancementRateDecimal;
+  const monthlyTimeSaved = totalTimeSavedMinutes / 60; // Convert to hours
   const monthlyWorkingHours = 24 * 10; // 24 days * 10 hours
   const efficiencyImprovement = ((monthlyWorkingHours / (monthlyWorkingHours - monthlyTimeSaved)) - 1) * 100;
 
   // Calculate extra CT examinations that can be performed with saved time using consistent calculation
   const isDaily = volumeType === 'daily';
   const monthlyExtraCT = calculateTotalAdditionalExams(baseDevice, targetDevice, patientVolume, isDaily, ctEnhancementRate);
-  
+
   // Use actual additional revenue calculation function for consistency
   const potentialExtraRevenue = calculateActualAdditionalRevenue(baseDevice, targetDevice, patientVolume, isDaily, ctEnhancementRate);
 
@@ -50,10 +60,10 @@ const ResultsSection: React.FC = () => {
       targetDevice.specs["智能协议支持"],
       targetDevice.specs["信息化支持"]
     ];
-    
+
     // Calculate the number of satisfied conditions
     const satisfiedCount = conditions.filter(Boolean).length;
-    
+
     if (satisfiedCount === 6) {
       return {
         rating: t.results.researchRatings.significant,
@@ -151,16 +161,30 @@ const ResultsSection: React.FC = () => {
           </p>
         </div>
       </div>
-      
+
       {/* Charts Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <BarChartComponent />
-        <RadarChartComponent />
+      <div className="space-y-6">
+        {/* Top row charts - Bar and Radar */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="min-h-[400px]">
+            <BarChartComponent />
+          </div>
+          <div className="min-h-[400px]">
+            <RadarChartComponent />
+          </div>
+        </div>
+
+        {/* Full width cumulative revenue chart */}
+        <div className="w-full">
+          <div className="min-h-[400px]">
+            <CumulativeRevenueChart />
+          </div>
+        </div>
       </div>
-      
+
       {/* Parameters Comparison Table */}
       <ParameterComparison />
-      
+
       {/* Summary and Recommendation */}
       <div className="bg-white rounded-lg shadow-card p-6">
         <h2 className="text-lg font-semibold mb-4 text-neutral-800">{t.results.analysisConclusion}</h2>
@@ -169,7 +193,7 @@ const ResultsSection: React.FC = () => {
             {t.results.analysisConclusionContent.contrast}{t.results.analysisConclusionContent.comparedTo} <a href="https://www.radiologysolutions.bayer.com/medrad-centargo-ct" className="text-primary-600 hover:underline" target="_blank" rel="noopener noreferrer">{targetDevice.brand} {targetDevice.model}</a><sup>6</sup> {t.results.analysisConclusionContent.comparedTo} {baseDevice.brand} {baseDevice.model}，
             <span className="font-bold text-primary-700 bg-primary-50 px-2 py-1 rounded">{t.results.analysisConclusionContent.monthlyEfficiencyImprovement} {efficiencyImprovement.toFixed(1)}%，{t.results.analysisConclusionContent.equivalentTo} {monthlyTimeSaved.toFixed(1)} {t.results.analysisConclusionContent.workHours}。</span>
           </p>
-          
+
           <div className="space-y-2">
             <p className="font-medium">{t.results.analysisConclusionContent.benefitsFrom}</p>
             <ul className="list-disc pl-5 space-y-2">
@@ -208,25 +232,24 @@ const ResultsSection: React.FC = () => {
                 </p>
               </li>
               <li>
-                <span className="font-medium">{t.results.analysisConclusionContent.researchValueRating}</span> <span className={`font-medium ${
-                  researchValue.rating === t.results.researchRatings.significant ? "text-green-600" : 
+                <span className="font-medium">{t.results.analysisConclusionContent.researchValueRating}</span> <span className={`font-medium ${researchValue.rating === t.results.researchRatings.significant ? "text-green-600" :
                   researchValue.rating === t.results.researchRatings.high ? "text-blue-600" : "text-amber-600"
-                }`}>{researchValue.rating}</span>
+                  }`}>{researchValue.rating}</span>
                 <div className="text-sm text-neutral-600 mt-1">
                   {researchValue.explanation}
                 </div>
               </li>
             </ul>
           </div>
-          
+
           <p className="mt-4">
             {t.results.analysisConclusionContent.conclusion.replace('{targetBrand}', targetDevice.brand).replace('{targetModel}', targetDevice.model)}
-            {isWorthyInvestment 
+            {isWorthyInvestment
               ? <span className="text-green-600 font-medium"> {t.results.analysisConclusionContent.worthyInvestment}</span>
               : <span className="text-amber-600 font-medium"> {t.results.analysisConclusionContent.cautiousEvaluation}</span>
             }，
             {t.results.analysisConclusionContent.annualSavings} <span className="font-semibold">{formatCurrency(annualSavings)}</span>。
-            {targetDevice.specs["智能协议支持"] && 
+            {targetDevice.specs["智能协议支持"] &&
               <span className="text-primary-600"> {t.results.analysisConclusionContent.smartProtocolBenefit}</span>
             }
           </p>

@@ -14,7 +14,7 @@ import {
 } from '../calculations';
 import { Device } from '../../types';
 
-// Mock device data for testing
+// Mock device data for testing (updated to match actual device specs)
 const mockBaseDevice: Device = {
   brand: 'Ulrich',
   model: 'CTMotion',
@@ -22,8 +22,8 @@ const mockBaseDevice: Device = {
   isBase: true,
   imageUrl: '/test-base.png',
   specs: {
-    "耗材更换时间_分钟": 2,
-    "单次检查总耗时_分钟": 7,
+    "耗材更换时间_分钟": 6,
+    "单次检查总耗时_分钟": 12,
     "信息化支持": true,
     "智能协议支持": false,
     "单次检查耗材成本_元": 110,
@@ -48,8 +48,8 @@ const mockTargetDevice: Device = {
   isBase: false,
   imageUrl: '/test-target.png',
   specs: {
-    "耗材更换时间_分钟": 0.33,
-    "单次检查总耗时_分钟": 5,
+    "耗材更换时间_分钟": 2,
+    "单次检查总耗时_分钟": 10.33,
     "信息化支持": true,
     "智能协议支持": true,
     "单次检查耗材成本_元": 100,
@@ -72,29 +72,29 @@ describe('Calculation Functions', () => {
     it('should calculate time efficiency savings correctly for daily input', () => {
       const result = calculateDeltaP(mockBaseDevice, mockTargetDevice, 50, true, 60);
       
-      // Expected calculation:
-      // Time saved per patient: 7 - 5 = 2 minutes
-      // Consumable change saving per patient: (2 - 0.33) / 50 = 0.0334 minutes
-      // Total time saved per patient: 2 + 0.0334 = 2.0334 minutes
-      // Monthly volume: 50 * 24 = 1200 patients (updated to match WORKING_DAYS_PER_MONTH)
+      // Expected calculation with updated device specs:
+      // Time saved per patient: 12 - 10.33 = 1.67 minutes
+      // Consumable change saving per patient: (6 - 2) / 50 = 0.08 minutes
+      // Total time saved per patient: 1.67 + 0.08 = 1.75 minutes
+      // Monthly volume: 50 * 24 = 1200 patients
       // Enhancement rate: 60% = 0.6
-      // Monthly savings: 2.0334 * 1200 * 0.6 * 2 = 2928.096 yuan
+      // Monthly savings: 1.75 * 1200 * 0.6 * 1 = 1260 yuan (TIME_VALUE_PER_MINUTE = 1)
       
-      expect(result).toBeCloseTo(2928.096, 1);
+      expect(result).toBeCloseTo(1260, 1);
     });
 
     it('should calculate time efficiency savings correctly for monthly input', () => {
       const result = calculateDeltaP(mockBaseDevice, mockTargetDevice, 1100, false, 60);
       
       // Same calculation but monthly volume is used directly
-      // 2.0334 * 1100 * 0.6 * 2 = 2684.088 yuan
-      expect(result).toBeCloseTo(2684.088, 1);
+      // 1.75 * 1100 * 0.6 * 1 = 1155 yuan
+      expect(result).toBeCloseTo(1155, 1);
     });
 
     it('should handle zero time difference', () => {
       const sameTimeDevice = { ...mockTargetDevice };
-      sameTimeDevice.specs["单次检查总耗时_分钟"] = 7;
-      sameTimeDevice.specs["耗材更换时间_分钟"] = 2;
+      sameTimeDevice.specs["单次检查总耗时_分钟"] = 12;
+      sameTimeDevice.specs["耗材更换时间_分钟"] = 6;
       
       const result = calculateDeltaP(mockBaseDevice, sameTimeDevice, 50, true, 60);
       expect(result).toBe(0);
@@ -129,29 +129,30 @@ describe('Calculation Functions', () => {
   describe('calculateDeltaV', () => {
     it('should calculate cost savings correctly', () => {
       const contrastSavings = 1000; // ml
-      const result = calculateDeltaV(mockBaseDevice, mockTargetDevice, 50, true, contrastSavings);
+      const result = calculateDeltaV(mockBaseDevice, mockTargetDevice, 50, true, contrastSavings, 60);
       
       // Consumable cost saving per patient: 110 - 100 = 10 yuan
-      // Monthly volume: 50 * 24 = 1200 (updated to match WORKING_DAYS_PER_MONTH)
-      // Consumable savings: 10 * 1200 = 12000 yuan
-      // Contrast savings: 1000 * 2 = 2000 yuan
-      // Total: 14000 yuan
+      // Monthly volume: 50 * 24 = 1200 patients
+      // Enhancement rate: 60% = 0.6 (applied to consumables)
+      // Consumable savings: 10 * 1200 * 0.6 = 7200 yuan
+      // Contrast savings: 1000 * 2.7 = 2700 yuan (CONTRAST_PRICE_PER_ML = 2.7)
+      // Total: 7200 + 2700 = 9900 yuan
       
-      expect(result).toBe(14000);
+      expect(result).toBe(9900);
     });
 
     it('should handle negative consumable cost difference', () => {
       const expensiveTargetDevice = { ...mockTargetDevice };
       expensiveTargetDevice.specs["单次检查耗材成本_元"] = 150;
       
-      const result = calculateDeltaV(mockBaseDevice, expensiveTargetDevice, 50, true, 1000);
+      const result = calculateDeltaV(mockBaseDevice, expensiveTargetDevice, 50, true, 1000, 60);
       
       // Consumable cost difference: 110 - 150 = -40 yuan per patient
-      // Monthly: -40 * 1200 = -48000 yuan (updated to match WORKING_DAYS_PER_MONTH = 24)
-      // Plus contrast savings: 2000 yuan
-      // Total: -46000 yuan
+      // Monthly: -40 * 1200 * 0.6 = -28800 yuan (with enhancement rate applied)
+      // Plus contrast savings: 1000 * 2.7 = 2700 yuan
+      // Total: -28800 + 2700 = -26100 yuan
       
-      expect(result).toBe(-46000);
+      expect(result).toBe(-26100);
     });
   });
 

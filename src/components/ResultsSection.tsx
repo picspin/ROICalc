@@ -25,8 +25,8 @@ const ResultsSection: React.FC = () => {
   const isWorthyInvestment = roi > 15;
 
   // Calculate monthly time value saved in hours
-  const monthlyTimeSaved = deltaP / 2 / 60; // Convert from Yuan (2 Yuan/min) to hours
-  const monthlyWorkingHours = 26 * 10; // 26 days * 10 hours
+  const monthlyTimeSaved = deltaP / 1 / 60; // Convert from Yuan (1 Yuan/min) to hours
+  const monthlyWorkingHours = 24 * 10; // 24 days * 10 hours
   const efficiencyImprovement = ((monthlyWorkingHours / (monthlyWorkingHours - monthlyTimeSaved)) - 1) * 100;
 
   // Calculate extra CT examinations that can be performed with saved time
@@ -37,7 +37,7 @@ const ResultsSection: React.FC = () => {
   const potentialExtraRevenue = monthlyExtraCT * ctExamRevenue;
 
   // Calculate contrast agent savings cost
-  const contrastSavingsCost = contrastSavings * 2; // 2 Yuan/ml
+  const contrastSavingsCost = contrastSavings * 2.7; // 2.7 Yuan/ml
 
   // Determine research application value rating
   const determineResearchValue = () => {

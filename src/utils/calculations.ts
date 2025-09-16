@@ -6,12 +6,12 @@ const TIME_VALUE_PER_MINUTE = 1;
 const WORKING_DAYS_PER_MONTH = 24;
 // Working months per year
 const WORKING_MONTHS_PER_YEAR = 12;
-// 对比剂价格（元/ml）
-const CONTRAST_PRICE_PER_ML = 2;
+// 对比剂价格,以UV370为例（元/ml）
+const CONTRAST_PRICE_PER_ML = 2.7;
 // 基础对比剂用量（ml/患者）
 const BASE_CONTRAST_VOLUME = 62;
 // 智能协议对比剂节省比例
-const SMART_PROTOCOL_SAVING_RATE = 0.2; // 20%
+const SMART_PROTOCOL_SAVING_RATE = 0.15; // 15%
 
 // CT检查费用常量 (基于2025年8月全国放射科检查费用标准)
 export const CT_ENHANCED_FEE = 269.5; // RMB
@@ -64,7 +64,7 @@ export const calculateDeltaP = (
  * 计算成本效益 (∆V)
  * 
  * 计算方法：
- * 1. 耗材成本节省 = (基准设备耗材成本 - 目标设备耗材成本) * 月患者量
+ * 1. 耗材成本节省 = (基准设备耗材成本 - 目标设备耗材成本) * 月患者量 * CT增强率
  * 2. 对比剂节省费用 = 对比剂节省量 * 对比剂单价
  * 3. 月度成本总节省 = 耗材成本节省 + 对比剂节省费用
  */
@@ -73,7 +73,8 @@ export const calculateDeltaV = (
   targetDevice: Device,
   patientVolume: number,
   isDaily: boolean,
-  contrastSavingsVolume: number
+  contrastSavingsVolume: number,
+  enhancementRate: number = 60
 ): number => {
   // Cost saved per patient in Yuan (only consumables)
   const costPerPatientBase = baseDevice.specs["单次检查耗材成本_元"];
@@ -83,8 +84,11 @@ export const calculateDeltaV = (
   // Convert to monthly if input is daily
   const monthlyPatientVolume = isDaily ? patientVolume * WORKING_DAYS_PER_MONTH : patientVolume;
 
+  // Apply enhancement rate (only enhanced scans use consumables)
+  const enhancementRateDecimal = enhancementRate / 100;
+
   // Calculate monthly consumables cost saving
-  const consumablesSaving = costSavedPerPatient * monthlyPatientVolume;
+  const consumablesSaving = costSavedPerPatient * monthlyPatientVolume * enhancementRateDecimal;
 
   // Calculate cost saving from contrast agent reduction
   const contrastSavingCost = contrastSavingsVolume * CONTRAST_PRICE_PER_ML;
@@ -105,9 +109,14 @@ export const calculateContrastSavings = (
   baseDevice: Device,
   targetDevice: Device,
   patientVolume: number,
-  isDaily: boolean
+  isDaily: boolean,
+  enhancementRate: number = 60
 ): number => {
   const monthlyVolume = isDaily ? patientVolume * WORKING_DAYS_PER_MONTH : patientVolume;
+  
+  // Apply enhancement rate (only enhanced scans use contrast)
+  const enhancementRateDecimal = enhancementRate / 100;
+  const enhancedPatientsVolume = monthlyVolume * enhancementRateDecimal;
 
   // 计算基准和目标设备的节省比例
   const baseSavingRate = baseDevice.specs["智能协议支持"] ? SMART_PROTOCOL_SAVING_RATE : 0;
@@ -118,9 +127,9 @@ export const calculateContrastSavings = (
   const targetEfficiency = targetDevice.specs["造影剂节省量"] as number;
   const efficiencyFactor = Math.max(0, (targetEfficiency - baseEfficiency) / 10); // 转换为0-1范围
 
-  // 计算基准设备和目标设备的造影剂使用量
-  const baseUsage = monthlyVolume * BASE_CONTRAST_VOLUME * (1 - baseSavingRate);
-  const targetUsage = monthlyVolume * BASE_CONTRAST_VOLUME * (1 - targetSavingRate - efficiencyFactor * 0.15); // 额外15%的效率节省
+  // 计算基准设备和目标设备的造影剂使用量 (只针对增强检查)
+  const baseUsage = enhancedPatientsVolume * BASE_CONTRAST_VOLUME * (1 - baseSavingRate);
+  const targetUsage = enhancedPatientsVolume * BASE_CONTRAST_VOLUME * (1 - targetSavingRate - efficiencyFactor * 0.15); // 额外15%的效率节省
 
   // 计算节省量
   return Math.max(0, baseUsage - targetUsage);
@@ -134,11 +143,11 @@ export const calculateROI = (
   enhancementRate: number = 60
 ): CalculationResult => {
   // Calculate contrast savings
-  const contrastSavings = calculateContrastSavings(baseDevice, targetDevice, patientVolume, isDaily);
+  const contrastSavings = calculateContrastSavings(baseDevice, targetDevice, patientVolume, isDaily, enhancementRate);
 
   // Calculate monthly delta P and delta V
   const monthlyDeltaP = calculateDeltaP(baseDevice, targetDevice, patientVolume, isDaily, enhancementRate);
-  const monthlyDeltaV = calculateDeltaV(baseDevice, targetDevice, patientVolume, isDaily, contrastSavings);
+  const monthlyDeltaV = calculateDeltaV(baseDevice, targetDevice, patientVolume, isDaily, contrastSavings, enhancementRate);
 
   // Calculate additional revenue
   const additionalRevenue = calculateAdditionalRevenue(baseDevice, targetDevice, patientVolume, isDaily, enhancementRate);

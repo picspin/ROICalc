@@ -135,7 +135,7 @@ export const zhTranslations: Translations = {
     },
     radarTooltips: {
       clinicalAccuracy: 'CARE研究证实活塞式高注结合主动气泡管理，对提升图像质量有显著帮助（Mcdemott MC .et.al. IEEE Trans Biomed Eng. 2021）',
-      workEfficiency: '耗材更换时间成本及AutoDoc™ 信息化加持证明对患者增强检查提高了效率',
+      workEfficiency: 'DaySet更换时间成本及AutoDoc™ 信息化加持证明对患者增强检查提高了效率',
       usability: '信息化加持信息化及AutoDoc™ 扫码枪功能方便加大了数据可回溯性和高注易用性',
       researchValue: '个性化方案，P3T方案及KVp Set助力提升科研价值',
       maintenanceConvenience: 'Bayer VirtualCare及Bayer工程师团队敏捷运营',
@@ -161,7 +161,7 @@ export const zhTranslations: Translations = {
       contrastSaving: '造影剂节省量',
     },
     specifications: {
-      consumableChangeTime: '耗材更换时间',
+      consumableChangeTime: 'DaySet更换时间',
       examTotalTime: '单次检查总耗时',
       informationSupport: '信息化支持',
       smartProtocolSupport: '智能协议支持',

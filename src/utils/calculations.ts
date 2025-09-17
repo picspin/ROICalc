@@ -23,8 +23,8 @@ export const CT_PLAIN_DURATION = 2; // minutes
  * 
  * 计算方法：
  * 1. 每患者时间节省 = 基准设备检查时间 - 目标设备检查时间
- * 2. 耗材更换时间节省 = (基准设备更换时间 - 目标设备更换时间) / 每50患者
- * 3. 总时间节省 = (每患者时间节省 + 耗材更换时间节省) * 月患者量 * CT增强率 * 时间价值
+ * 2. DaySet更换时间节省 = (基准设备更换时间 - 目标设备更换时间) / 每50患者
+ * 3. 总时间节省 = (每患者时间节省 + DaySet更换时间节省) * 月患者量 * CT增强率 * 时间价值
  */
 export const calculateDeltaP = (
   baseDevice: Device,
@@ -270,7 +270,7 @@ export const calculateTotalAdditionalExams = (
   const targetExamTime = targetDevice.specs["单次检查总耗时_分钟"] as number;
   const timeSavedPerPatient = baseExamTime - targetExamTime;
 
-  // 计算耗材更换时间节省 (分钟/患者)
+  // 计算DaySet更换时间节省 (分钟/患者)
   const baseConsumableTime = baseDevice.specs["耗材更换时间_分钟"] as number;
   const targetConsumableTime = targetDevice.specs["耗材更换时间_分钟"] as number;
   const consumableTimeSavedPerPatient = (baseConsumableTime - targetConsumableTime) / 50; // 每50患者更换一次
@@ -324,7 +324,7 @@ export const calculateActualAdditionalRevenue = (
   const targetExamTime = targetDevice.specs["单次检查总耗时_分钟"] as number;
   const timeSavedPerPatient = baseExamTime - targetExamTime;
 
-  // 计算耗材更换时间节省 (分钟/患者)
+  // 计算DaySet更换时间节省 (分钟/患者)
   const baseConsumableTime = baseDevice.specs["耗材更换时间_分钟"] as number;
   const targetConsumableTime = targetDevice.specs["耗材更换时间_分钟"] as number;
   const consumableTimeSavedPerPatient = (baseConsumableTime - targetConsumableTime) / 50; // 每50患者更换一次

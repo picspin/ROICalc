@@ -135,7 +135,7 @@ export const enTranslations: Translations = {
     },
     radarTooltips: {
       clinicalAccuracy: 'CARE study confirms that piston-type high-pressure injection combined with active bubble management significantly helps improve image quality (Mcdemott MC .et.al. IEEE Trans Biomed Eng. 2021)',
-      workEfficiency: 'The cost of consumable replacement time and AutoDoc™ information technology enhancement prove that patient enhancement examination efficiency has been improved',
+      workEfficiency: 'The cost of DaySet replacement time and AutoDoc™ information technology enhancement prove that patient enhancement examination efficiency has been improved',
       usability: 'Information technology enhancement and AutoDoc™ barcode scanning function facilitate data traceability and high-pressure injection usability',
       researchValue: 'Personalized solutions, P3T solutions and KVp Set help enhance research value',
       maintenanceConvenience: 'Bayer VirtualCare and Bayer engineer team agile operation',
@@ -161,7 +161,7 @@ export const enTranslations: Translations = {
       contrastSaving: 'Contrast Savings',
     },
     specifications: {
-      consumableChangeTime: 'Consumable Change Time',
+      consumableChangeTime: 'DaySet Change Time',
       examTotalTime: 'Total Exam Time',
       informationSupport: 'Information Support',
       smartProtocolSupport: 'Smart Protocol Support',

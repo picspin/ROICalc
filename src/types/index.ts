@@ -39,6 +39,7 @@ export interface CalculationResult {
   monthlySavings: number;
   annualSavings: number;
   contrastSavings: number;
+  additionalRevenue: number; // New: potential additional revenue from saved time
 }
 
 export interface ComparisonRadarData {
@@ -54,4 +55,44 @@ export interface InputData {
   targetDeviceId: string;
   baseDeviceId: string;
   ctDeviceCount: number;
+  ctEnhancementRate: number; // New: 0-100 percentage
+}
+
+// ECharts Cumulative Revenue Chart Types
+export interface CumulativeRevenueData {
+  month: number;
+  baseDeviceRevenue: number;
+  targetDeviceRevenue: number;
+  cumulativeBaseline: number;
+  cumulativeTarget: number;
+  monthlySavings: number;
+}
+
+export interface MonthlyRevenueBreakdown {
+  enhancedScans: {
+    count: number;
+    revenue: number;
+  };
+  plainScans: {
+    count: number;
+    revenue: number;
+  };
+  contrastSavings: number;
+  additionalExamRevenue: number;
+  totalMonthlyRevenue: number;
+}
+
+export interface CumulativeRevenueModel {
+  baselineDevice: MonthlyRevenueBreakdown[];
+  targetDevice: MonthlyRevenueBreakdown[];
+  monthlySavings: number[];
+  cumulativeSavings: number[];
+}
+
+export interface CumulativeRevenueChartProps {
+  baseDevice: Device;
+  targetDevice: Device;
+  patientVolume: number;
+  isDaily: boolean;
+  enhancementRate: number;
 }
